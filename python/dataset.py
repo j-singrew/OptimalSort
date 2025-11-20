@@ -6,16 +6,18 @@ import numpy as np
 from numpy import random
 
 def generateNearSortedArray(sorted_Array ,swap_percentage):
-    near_sorted = sorted_Array.copy
-    N =len(near_sorted)
 
+    near_sorted = sorted_Array.copy()
+    N =len(near_sorted)
     num_swaps = int(N * swap_percentage)
 
 
     for i in range(num_swaps):
 
         ida ,idb = np.random.randint(0,N-1),np.random.randint(0,N-1)
-        near_sorted[ida],near_sorted[idb] = near_sorted[idb], near_sorted[ida]
+
+        if ida != idb:
+            near_sorted[ida],near_sorted[idb] = near_sorted[idb], near_sorted[ida]
 
     return near_sorted
 
@@ -24,6 +26,15 @@ def DataGeneration():
     N_medium = 100_000
     N_large  = 1_000_000
     N_UNIQUE = 1000
+    swap_percentage = 0.01
+    
+    MASTER_UNSORTED = np.random.randint(low=1, high=10_000_000, size=N_large)
+    MASTER_SORTED = np.sort(MASTER_UNSORTED)
+    MASTER_REVERSED = MASTER_SORTED[::-1].copy()
+    MASTER_UNIQUE = np.arange(N_large)
+    np.random.shuffle(MASTER_UNIQUE)
+    MASTER_DUPLICATE = np.random.randint(low=0, high=N_UNIQUE, size=N_large)
+
 
     #random-Array ,small,medium,large
     randomArrSmall =  random.randint(low=1,high=100,size=N_small)
@@ -33,50 +44,46 @@ def DataGeneration():
     randomArrLarge = random.randint(low=1,high=10_000_000,size=N_large)
 
     #sorted-Array
-    Master_Array = np.random.randint(low=1, high=10000000, size=1_000_000)
-    sorted_Array = np.sort(Master_Array)
-
-    randomArrSmall = sorted_Array[:N_small].copy()
 
 
-    randomArrMedium  = sorted_Array[:N_medium].copy()
+    sortedArrSmall =  MASTER_SORTED [:N_small].copy()
 
 
-    randomArrLarge =  sorted_Array[:N_large].copy()
+    sortedArrMedium  =  MASTER_SORTED [:N_medium].copy()
+
+
+    sortedArrLarge =   MASTER_SORTED [:N_large].copy()
 
     #near sorted-Array
-    swap_percentage = 0.5
 
-    near_sorted_array = generateNearSortedArray(sorted_Array,swap_percentage)
 
-    randomArrSmall = near_sorted_array[:N_small].copy()
+    near_sorted_array = generateNearSortedArray( MASTER_SORTED ,swap_percentage)
 
-    randomArrMedium  = near_sorted_array[:N_medium].copy()
+    nSortedArrSmall = near_sorted_array[:N_small].copy()
 
-    randomArrLarge = near_sorted_array[:N_large].copy()
+    nSortedArrMedium  = near_sorted_array[:N_medium].copy()
+
+    nSortedArrLarge = near_sorted_array[:N_large].copy()
 
     #reverse sorted-Array 
 
-    reversed_Array = sorted_Array[::-1].copy()
 
-    randomArrSmall = reversed_Array[:N_small].copy()
-
-
-    randomArrMedium  = reversed_Array[:N_medium].copy()
+    reverseArrSmall = MASTER_REVERSED[:N_small].copy()
 
 
-    randomArrLarge = reversed_Array[:N_large].copy()
+    reverseArrMedium  = MASTER_REVERSED[:N_medium].copy()
+
+
+    reverseArrLarge = MASTER_REVERSED[:N_large].copy()
 
     #no Duplicate-Array
 
-    unique_Master_Array = np.arange(N_large)
-    np.random.shuffle(unique_Master_Array)
 
-    randomArrSmall = unique_Master_Array[:N_small].copy()
+    noDuplicateArrSmall = MASTER_UNIQUE [:N_small].copy()
 
-    randomArrMedium  =  unique_Master_Array[:N_medium].copy()
+    noDuplicateArrMedium  =  MASTER_UNIQUE [:N_medium].copy()
 
-    randomArrLarge =  unique_Master_Array[:N_large].copy()
+    noDuplicateArrLarge =  MASTER_UNIQUE[:N_large].copy()
 
     #high duplicate-Array
 
