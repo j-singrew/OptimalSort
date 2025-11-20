@@ -20,8 +20,8 @@ def DataGeneration():
     randomArrLarge = random.randint(low=1,high=10_000_000,size=N_large)
 
     #sorted-Array
-    u_Array = np.random.randint(low=1, high=10000000, size=1_000_000)
-    sorted_Array = np.sort(u_Array)
+    Master_Array = np.random.randint(low=1, high=10000000, size=1_000_000)
+    sorted_Array = np.sort(Master_Array)
 
     randomArrSmall = sorted_Array[:N_small].copy()
 
@@ -31,8 +31,21 @@ def DataGeneration():
 
     randomArrLarge =  sorted_Array[:N_large].copy()
 
-
     #near sorted-Array
+    near_sorted = sorted_Array.copy
+    N =len(near_sorted)
+
+    num_swaps = int(N * 5)
+
+
+    for i in range(num_swaps):
+
+        ida ,idb = np.random.randint(0,N-1),np.random.randint(0,N-1)
+        near_sorted[ida],near_sorted[idb] = near_sorted[idb], near_sorted[ida]
+
+
+
+    
 
 
 
