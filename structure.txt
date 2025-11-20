@@ -1,0 +1,18 @@
+project/
+│
+├── python/
+│   ├── benchmark.py        # runs benchmarks, collects metrics, plots results
+│   ├── algorithms.py       # interface to C++ algorithms (via ctypes/pybind11)
+│   ├── scorer.py           # calculates your 10 success metrics
+│   └── dataset.py          # generates test arrays (random, sorted, reverse, etc)
+│
+├── cpp/
+│   ├── sort.cpp            # contains all sorting algorithms
+│   ├── sort.hpp            # declarations + reusable utilities
+│   ├── metrics.hpp         # small library to count swaps/comparisons
+│   └── build.sh            # builds a shared library for Python to import
+│
+├── results/
+│   └── plots/              # charts comparing algorithms
+│
+└── README.md
