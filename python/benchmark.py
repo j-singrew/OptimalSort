@@ -36,7 +36,7 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
 
 
 
-    run_bechmark = "sort_function(data_copy)"
+    run_bechmark = "sort_func(data_copy)"
     times = timeit.repeat(
         run_bechmark , 
         setup=timeit_setup_code,
@@ -72,7 +72,7 @@ def Benchmarking_Orchestration():
                 "data_pattern": target['name'].split('_')[0],
                 "size_category": target['name'].split('_')[-1],
                 "N": target['N'],
-                "avg_time_ms":  alg_time['avg_time_ms'],
+                "avg_time_ms":  alg_time,
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0      
