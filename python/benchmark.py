@@ -1,20 +1,93 @@
 from dataset import DataGeneration
-
+import numpy  as np
+import timeit
 
 dataset = DataGeneration()
 
+def prepare_benchmark_targets():
+    size_name = ["small","medium","large"]
 
-randomArray  = dataset["random_order"]
-sortedArray = dataset["sorted_order"]
-reversedArray = dataset["reverse_sorted"]
-nearSortedArray = dataset["near_sorted"]
-noDuplicateArray = dataset["no_duplicates"]
-highDuplicateArray = dataset["high_duplicates"]
+    benchmarks_to_run = []
+
+    for pattern_name ,arr_size in dataset.items():
+
+        for i ,arr in enumerate(arr_size):
+            current_size_name = size_name[i]
+
+            arr_benchmark = {
+                "name": f"{pattern_name}_{current_size_name}",
+                "N": len(arr),
+                "data": arr    
+            }
+            benchmarks_to_run.append(arr_benchmark)
+
+    print("--- 18 Test Targets Prepared ---")
+
+    for target in benchmarks_to_run:
+
+        print(f"Target: {target['name']:<25} (N={target['N']:,})")
+
+    return benchmarks_to_run
+
+def  run_iteration_metrics(data_arr,sort_func,num_runs):
+    # 1. Initialize times list
+    timeit_setup_code = "import copy; data_copy = copy.deepcopy(data)"
+    run_times = []
 
 
-random_Array_small,random_Array_medium,random_Array_large  = randomArray[0] ,randomArray[1] ,randomArray[2]
-sorted_Array_small,sorted_Array_medium,sorted_Array_large = sortedArray[0],sortedArray[1],sortedArray[2]
-reversed_Array_small,reversed_Array_medium,reversed_Array_large =reversedArray[0],reversedArray[1],reversedArray[2]
-nearsorted_Array_Small,nearsorted_Array_medium,nearsorted_Array_large=nearSortedArray[0],nearSortedArray[1],nearSortedArray[2]
-noDuplicateArray_small,noDuplicateArray_medium,noDuplicateArray_large = noDuplicateArray[0],noDuplicateArray[1],noDuplicateArray[2]
-high_Duplpicate_Array_small,high_Duplpicate_Array_medium,high_Duplpicate_Array_large = highDuplicateArray[0],highDuplicateArray[1],highDuplicateArray[2]
+
+    run_bechmark = "sort_function(data_copy)"
+    times = timeit.repeat(
+        run_bechmark , 
+        setup=timeit_setup_code,
+        globals={'sort_func': sort_func, 'data': data_arr},
+        repeat=num_runs,  
+        number=1   
+    )
+    run_times.append(min(times))
+    return min(times) * 1000
+
+def Benchmarking_Orchestration():
+    NUM_RUNS = 5
+    all_data_s = prepare_benchmark_targets()
+    test_targets = run_iteration_metrics(all_data_s)
+
+    algorithms_to_run = [
+
+        ("Python Timsort", lambda arr: arr.tolist().sort()),
+        ("NumPy Sort", lambda arr: np.sort(arr))
+    ]
+
+    final_results = []
+    for algo_name ,algo_typ in  algorithms_to_run:
+
+        for target in test_targets:
+
+            data_to_pass = target['data']
+
+            alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,N= NUM_RUNS )
+
+            final_record = {
+                "algorithm_name": algo_name,
+                "data_pattern": target['name'].split('_')[0],
+                "size_category": target['name'].split('_')[-1],
+                "N": target['N'],
+                "avg_time_ms":  alg_time['avg_time_ms'],
+                "num_runs": NUM_RUNS,
+                "comparisons": 0, 
+                "swaps": 0      
+            }
+            final_results.append(final_record)
+            
+            print(f"  {target['name']:<30} | Time: {alg_time:.4f} ms")
+
+            final_record["avg_time_ms"] = alg_time
+
+
+if __name__ == "__main__":
+    Benchmarking_Orchestration()
+
+
+
+
+
