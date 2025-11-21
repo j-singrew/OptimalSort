@@ -40,12 +40,12 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
     times = timeit.repeat(
         run_bechmark , 
         setup=timeit_setup_code,
-        globals={'sort_func': sort_func, 'data': data_arr}, 
+        globals={'sort_func': sort_func, 'data': data_arr},
         repeat=num_runs,  
         number=1   
     )
     run_times.append(min(times))
-    return min(times)
+    return min(times) * 1000
 
 def Benchmarking_Orchestration():
     NUM_RUNS = 5
