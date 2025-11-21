@@ -49,8 +49,8 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
 
 def Benchmarking_Orchestration():
     NUM_RUNS = 5
-    all_data_s = prepare_benchmark_targets()
-    test_targets = run_iteration_metrics(all_data_s)
+
+    test_targets = prepare_benchmark_targets()
 
     algorithms_to_run = [
 
