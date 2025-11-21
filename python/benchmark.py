@@ -1,5 +1,6 @@
 from dataset import DataGeneration
-
+import numpy  as np
+import timeit
 
 dataset = DataGeneration()
 
@@ -25,5 +26,23 @@ def benchmark_dataset_generation():
     for target in benchmarks_to_run:
 
         print(f"Target: {target['name']:<25} (N={target['N']:,})")
-        
+
     return benchmarks_to_run
+
+def  run_iteration_metrics(data_arr,sort_func):
+    # 1. Initialize times list
+    timeit_setup_code = "import copy; data_copy = copy.deepcopy(data)"
+    run_times = []
+
+    d_array = data_arr.copy
+
+    run_bechmark = "sort_function(d_array)"
+    times = timeit.repeat(
+        run_bechmark , 
+        setup=timeit_setup_code,
+        globals={'sort_func': sort_func, 'data': data_arr}, 
+        repeat=5,  
+        number=1   
+    )
+    return min(times)
+
