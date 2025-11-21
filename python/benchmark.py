@@ -47,3 +47,21 @@ def  run_iteration_metrics(data_arr,sort_func):
     run_times.append(min(times))
     return min(times)
 
+def Benchmarking_Orchestration():
+
+    all_data_s = benchmark_dataset_generation()
+    test_targets = run_iteration_metrics(all_data_s)
+
+    algorithms_to_run = [
+        ("Python Timsort", lambda arr: arr.tolist().sort()),
+        ("NumPy Sort", lambda arr: np.sort(arr))
+    ]
+
+    final_results = []
+    for algo_name ,algo_typ in  algorithms_to_run:
+
+        for targets in test_targets:
+
+
+
+
