@@ -4,7 +4,7 @@ import timeit
 
 dataset = DataGeneration()
 
-def benchmark_dataset_generation():
+def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
 
     benchmarks_to_run = []
@@ -29,19 +29,19 @@ def benchmark_dataset_generation():
 
     return benchmarks_to_run
 
-def  run_iteration_metrics(data_arr,sort_func,N):
+def  run_iteration_metrics(data_arr,sort_func,num_runs):
     # 1. Initialize times list
     timeit_setup_code = "import copy; data_copy = copy.deepcopy(data)"
     run_times = []
 
-    d_array = data_arr.copy
 
-    run_bechmark = "sort_function(d_array)"
+
+    run_bechmark = "sort_function(data_copy)"
     times = timeit.repeat(
         run_bechmark , 
         setup=timeit_setup_code,
         globals={'sort_func': sort_func, 'data': data_arr}, 
-        repeat=N,  
+        repeat=num_runs,  
         number=1   
     )
     run_times.append(min(times))
@@ -49,7 +49,7 @@ def  run_iteration_metrics(data_arr,sort_func,N):
 
 def Benchmarking_Orchestration():
     NUM_RUNS = 5
-    all_data_s = benchmark_dataset_generation()
+    all_data_s = prepare_benchmark_targets()
     test_targets = run_iteration_metrics(all_data_s)
 
     algorithms_to_run = [
