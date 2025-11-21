@@ -38,7 +38,7 @@ def generate_random_order(N:int) -> np.array:
 
 def generate_already_sorted(N:int) -> np.array:
 
-    return MASTER_SORTED[:N].copy
+    return MASTER_SORTED[:N].copy()
 
 def generate_reverse_sorted(N:int) ->np.array:
 
