@@ -44,5 +44,6 @@ def  run_iteration_metrics(data_arr,sort_func):
         repeat=5,  
         number=1   
     )
+    run_times.append(min(times))
     return min(times)
 
