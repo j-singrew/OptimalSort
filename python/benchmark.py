@@ -79,9 +79,9 @@ def Benchmarking_Orchestration():
             }
             final_results.append(final_record)
             
-            print(f"  {target['name']:<30} | Time: {final_results['avg_time_ms']:.4f} ms")
+            print(f"  {target['name']:<30} | Time: {alg_time:.4f} ms")
 
-
+            final_record["avg_time_ms"] = alg_time
 
 
 if __name__ == "__main__":
