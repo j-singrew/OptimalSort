@@ -65,7 +65,7 @@ def Benchmarking_Orchestration():
 
             data_to_pass = target['data']
 
-            alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,N= NUM_RUNS )
+            alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
 
             final_record = {
                 "algorithm_name": algo_name,
