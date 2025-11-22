@@ -36,7 +36,7 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
 
 
 
-    run_bechmark = "sort_function(data_copy)"
+    run_bechmark = "sort_func(data_copy)"
     times = timeit.repeat(
         run_bechmark , 
         setup=timeit_setup_code,
@@ -49,8 +49,8 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
 
 def Benchmarking_Orchestration():
     NUM_RUNS = 5
-    all_data_s = prepare_benchmark_targets()
-    test_targets = run_iteration_metrics(all_data_s)
+
+    test_targets = prepare_benchmark_targets()
 
     algorithms_to_run = [
 
@@ -65,14 +65,14 @@ def Benchmarking_Orchestration():
 
             data_to_pass = target['data']
 
-            alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,N= NUM_RUNS )
+            alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
 
             final_record = {
                 "algorithm_name": algo_name,
                 "data_pattern": target['name'].split('_')[0],
                 "size_category": target['name'].split('_')[-1],
                 "N": target['N'],
-                "avg_time_ms":  alg_time['avg_time_ms'],
+                "avg_time_ms":  alg_time,
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0      
