@@ -1,8 +1,15 @@
 from dataset import DataGeneration
 import numpy  as np
 import timeit
+import ctypes
 
 dataset = DataGeneration()
+
+
+clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
+
+
+
 
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
