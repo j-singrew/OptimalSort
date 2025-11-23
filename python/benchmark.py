@@ -6,14 +6,6 @@ import ctypes
 dataset = DataGeneration()
 
 
-def run_cpp_quicksort_wrapper(arr:np.ndarray):
-
-    if clibrary is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")
-
-    clibrary .custom_quicksort_c(arr, arr.size)
-
-
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
 
@@ -69,25 +61,6 @@ def Benchmarking_Orchestration():
     ]
 
     final_results = []
-    clibrary  = None
-    try:
-        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
-        clibrary.custom_quicksort_c.argtypes = [
-
-            np.ctypeslib.ndpointer(
-                dtype=np.intc, 
-                flags='WRITEABLE' 
-            ),
-
-            ctypes.c_int
-        ]
-
-
-        clibrary.custom_quicksort_c.restype = None
-
-    except Exception as e:
-        print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
-        clibrary = None
 
     for algo_name ,algo_typ in  algorithms_to_run:
 
