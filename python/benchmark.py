@@ -46,14 +46,14 @@ def prepare_benchmark_targets():
 
         for i ,arr in enumerate(arr_size):
             current_size_name = size_name[i]
-
-            benchmarks_to_run.append(arr_benchmark = {
+            arr_benchmark = {
                 "name": f"{pattern_name}_{current_size_name}",
                 "N": len(arr),
                 "data": arr.copy()
             }
-            )
-            
+
+            benchmarks_to_run.append(arr_benchmark)
+      
 
     print("--- 18 Test Targets Prepared ---")
 
@@ -64,8 +64,9 @@ def prepare_benchmark_targets():
     return benchmarks_to_run
 
 def  run_iteration_metrics(data_arr,sort_func,num_runs):
-    stmt = "sort_func(data.copy())"
-    timeit_setup_code = "import numpy as np; data = base_data"
+    
+    timeit_setup_code = "import numpy as np; data = base_data.copy()" 
+    stmt = "sort_func(data)"
 
     times =timeit.repeat(
         stmt,
