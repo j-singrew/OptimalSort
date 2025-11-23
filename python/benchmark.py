@@ -4,6 +4,37 @@ import timeit
 import ctypes
 
 dataset = DataGeneration()
+clibrary = None
+
+def setup_ctype_quicksort():
+    global clibrary
+
+
+    try:
+        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
+        print("Sucess conecting c++")
+        #function signitaure
+        clibrary.custom_quicksort_c.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=np.intc,
+            flags='WRITEABLE',
+            
+        ),
+        ctypes.c_int,
+        ]
+        clibrary.custom_quicksort_c.restype = None  
+
+    except Exception as e:
+        print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
+        clibrary = None
+
+def run_c_quicksort_wrapper(arr:np.ndarray):
+
+    if clibrary  is None:
+        raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")   
+
+    clibrary.custom_quicksort_c(arr, arr.size)
+
 
 
 def prepare_benchmark_targets():
@@ -16,12 +47,13 @@ def prepare_benchmark_targets():
         for i ,arr in enumerate(arr_size):
             current_size_name = size_name[i]
 
-            arr_benchmark = {
+            benchmarks_to_run.append(arr_benchmark = {
                 "name": f"{pattern_name}_{current_size_name}",
                 "N": len(arr),
-                "data": arr    
+                "data": arr.copy()
             }
-            benchmarks_to_run.append(arr_benchmark)
+            )
+            
 
     print("--- 18 Test Targets Prepared ---")
 
@@ -32,22 +64,22 @@ def prepare_benchmark_targets():
     return benchmarks_to_run
 
 def  run_iteration_metrics(data_arr,sort_func,num_runs):
-    # 1. Initialize times list
-    timeit_setup_code = "import copy; data_copy = copy.deepcopy(data)"
-    run_times = []
+    stmt = "sort_func(data.copy())"
+    timeit_setup_code = "import numpy as np; data = base_data"
 
-
-
-    run_bechmark = "sort_func(data_copy)"
-    times = timeit.repeat(
-        run_bechmark , 
+    times =timeit.repeat(
+        stmt,
         setup=timeit_setup_code,
-        globals={'sort_func': sort_func, 'data': data_arr},
-        repeat=num_runs,  
-        number=1   
+        globals={"sort_func": sort_func, "base_data": data_arr},
+        repeat=num_runs,
+        number=1,
     )
-    run_times.append(min(times))
     return min(times) * 1000
+
+
+
+
+
 
 def Benchmarking_Orchestration():
     NUM_RUNS = 5
@@ -85,12 +117,32 @@ def Benchmarking_Orchestration():
             print(f"  {target['name']:<30} | Time: {alg_time:.4f} ms")
 
             final_record["avg_time_ms"] = alg_time
+    return final_results
+
+def Benchmark_Cpp_Sort():
+    if clibrary is None:
+        print("C++ library not loaded. Skipping C++ benchmarks.")
+        return
+    Num_RUNS = 5
+    test_targets = prepare_benchmark_targets()
+
+    print("\n--- Running C++ Quicksort ---")
+
+    for target in test_targets:
+        base_data = target["data"]
+
+        def cpp_sort(arr):
+            run_c_quicksort_wrapper(arr)
+
+        alg_time = run_iteration_metrics(
+            data_arr=base_data,
+            sort_func=cpp_sort,
+            num_runs=Num_RUNS,          
+        )
+        print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
 if __name__ == "__main__":
+    setup_ctype_quicksort()
     Benchmarking_Orchestration()
-
-
-
-
-
+    Benchmark_Cpp_Sort()
