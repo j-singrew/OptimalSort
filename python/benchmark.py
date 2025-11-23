@@ -64,21 +64,16 @@ def prepare_benchmark_targets():
     return benchmarks_to_run
 
 def  run_iteration_metrics(data_arr,sort_func,num_runs):
-    # 1. Initialize times list
-    timeit_setup_code = "import copy; data_copy = copy.deepcopy(data)"
-    run_times = []
+    stmt = "sort_func(data.copy())"
+    timeit_setup_code = "import numpy as np; data = base_data"
 
-
-
-    run_bechmark = "sort_func(data_copy)"
-    times = timeit.repeat(
-        run_bechmark , 
+    times =timeit.repeat(
+        stmt,
         setup=timeit_setup_code,
-        globals={'sort_func': sort_func, 'data': data_arr},
-        repeat=num_runs,  
-        number=1   
+        globals={"sort_func": sort_func, "base_data": data_arr},
+        repeat=num_runs,
+        number=1,
     )
-    run_times.append(min(times))
     return min(times) * 1000
 
 
@@ -122,13 +117,32 @@ def Benchmarking_Orchestration():
             print(f"  {target['name']:<30} | Time: {alg_time:.4f} ms")
 
             final_record["avg_time_ms"] = alg_time
+    return final_results
 
+def Benchmark_Cpp_Sort():
+    if clibrary is None:
+        print("C++ library not loaded. Skipping C++ benchmarks.")
+        return
+    Num_RUNS = 5
+    test_targets = prepare_benchmark_targets()
 
+    print("\n--- Running C++ Quicksort ---")
+
+    for target in test_targets:
+        base_data = target["data"]
+
+        def cpp_sort(arr):
+            run_c_quicksort_wrapper(arr)
+
+        alg_time = run_iteration_metrics(
+            data_arr=base_data,
+            sort_func=cpp_sort,
+            num_runs=Num_RUNS,          
+        )
+        print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
 if __name__ == "__main__":
+    setup_ctype_quicksort()
     Benchmarking_Orchestration()
-    setup_ctype_quicksort() 
-
-
-
+    Benchmark_Cpp_Sort()
