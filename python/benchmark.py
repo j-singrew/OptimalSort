@@ -4,31 +4,17 @@ import timeit
 import ctypes
 
 dataset = DataGeneration()
-"""
-    clibrary  = None
-    try:
-        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
-        clibrary.custom_quicksort_c.argtypes = [
-
-            np.ctypeslib.ndpointer(
-                dtype=np.intc, 
-                flags='WRITEABLE' 
-            ),
-
-            ctypes.c_int
-        ]
-
-
-        clibrary.custom_quicksort_c.restype = None
-
-    except Exception as e:
-        print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
-        clibrary = None
-"""
+clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
 
 def setup_ctype_quicksort():
+    size_name = ["small","medium","large"]
+    tests_to_run = []
+    test_targets = prepare_benchmark_targets()
+
+
+
+
     try:
-        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
         print("Sucess conecting c++")
         #function signitaure
         clibrary.custom_quicksort_c.argtypes = [
@@ -46,11 +32,14 @@ def setup_ctype_quicksort():
         clibrary = None
 
 def run_c_quicksort_wrapper(arr:np.ndarray):
+
     if clibrary  is None:
 
         raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")   
 
     clibrary.custom_quicksort_c(arr, arr.size)
+
+
 
 
 
@@ -99,6 +88,11 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
     run_times.append(min(times))
     return min(times) * 1000
 
+
+
+
+
+
 def Benchmarking_Orchestration():
     NUM_RUNS = 5
 
@@ -137,18 +131,11 @@ def Benchmarking_Orchestration():
             final_record["avg_time_ms"] = alg_time
 
 
+
+
 if __name__ == "__main__":
     Benchmarking_Orchestration()
+    setup_ctype_quicksort() 
 
 
 
-
-
-"""
-    test_targets = prepare_benchmark_targets()
-    
-    if  clibrary:
-        print("\nFFI Connection is Active. Running Test:")
-    clibrary.custom_quicksort_c(arr,arr.size)
-
-"""
