@@ -140,7 +140,7 @@ def Benchmark_Cpp_Sort():
             sort_func=cpp_sort,
             num_runs=Num_RUNS,          
         )
-        print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
+        print(f"{target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
 if __name__ == "__main__":
