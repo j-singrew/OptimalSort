@@ -4,6 +4,56 @@ import timeit
 import ctypes
 
 dataset = DataGeneration()
+"""
+    clibrary  = None
+    try:
+        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
+        clibrary.custom_quicksort_c.argtypes = [
+
+            np.ctypeslib.ndpointer(
+                dtype=np.intc, 
+                flags='WRITEABLE' 
+            ),
+
+            ctypes.c_int
+        ]
+
+
+        clibrary.custom_quicksort_c.restype = None
+
+    except Exception as e:
+        print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
+        clibrary = None
+"""
+
+def setup_ctype_quicksort():
+    try:
+        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
+        print("Sucess conecting c++")
+        #function signitaure
+        clibrary.custom_quicksort_c.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=np.intc,
+            flags='WRITEABLE'
+        ),
+
+        ctypes.c_int
+
+        ]
+        clibrary.custom_quicksort_c.restype = None  
+    except Exception as e:
+        print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
+        clibrary = None
+
+def run_c_quicksort_wrapper(arr:np.ndarray):
+    if clibrary  is None:
+
+        raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")   
+
+    clibrary.custom_quicksort_c(arr, arr.size)
+
+
+
 
 
 def prepare_benchmark_targets():
@@ -94,3 +144,11 @@ if __name__ == "__main__":
 
 
 
+"""
+    test_targets = prepare_benchmark_targets()
+    
+    if  clibrary:
+        print("\nFFI Connection is Active. Running Test:")
+    clibrary.custom_quicksort_c(arr,arr.size)
+
+"""
