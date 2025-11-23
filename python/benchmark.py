@@ -4,29 +4,26 @@ import timeit
 import ctypes
 
 dataset = DataGeneration()
-clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
+clibrary = None
 
 def setup_ctype_quicksort():
-    size_name = ["small","medium","large"]
-    tests_to_run = []
-    test_targets = prepare_benchmark_targets()
-
-
+    global clibrary
 
 
     try:
+        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
         print("Sucess conecting c++")
         #function signitaure
         clibrary.custom_quicksort_c.argtypes = [
         np.ctypeslib.ndpointer(
             dtype=np.intc,
-            flags='WRITEABLE'
+            flags='WRITEABLE',
+            
         ),
-
-        ctypes.c_int
-
+        ctypes.c_int,
         ]
         clibrary.custom_quicksort_c.restype = None  
+
     except Exception as e:
         print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
         clibrary = None
@@ -34,14 +31,9 @@ def setup_ctype_quicksort():
 def run_c_quicksort_wrapper(arr:np.ndarray):
 
     if clibrary  is None:
-
         raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")   
 
     clibrary.custom_quicksort_c(arr, arr.size)
-
-
-
-
 
 
 
@@ -55,12 +47,13 @@ def prepare_benchmark_targets():
         for i ,arr in enumerate(arr_size):
             current_size_name = size_name[i]
 
-            arr_benchmark = {
+            benchmarks_to_run.append(arr_benchmark = {
                 "name": f"{pattern_name}_{current_size_name}",
                 "N": len(arr),
-                "data": arr    
+                "data": arr.copy()
             }
-            benchmarks_to_run.append(arr_benchmark)
+            )
+            
 
     print("--- 18 Test Targets Prepared ---")
 
