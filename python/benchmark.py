@@ -34,7 +34,12 @@ def run_c_quicksort_wrapper(arr:np.ndarray):
 
     clibrary.custom_quicksort(arr, arr.size)
 
-def run_c_
+def run_c_insertion_sort(arr:np.ndarray):
+
+    if clibrary is None:
+        raise RuntimeError("C++ library not loaded. Cannot run C++ insertion sort.")   
+
+    clibrary.insertion_sort(arr, arr.size)
 
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
