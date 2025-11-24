@@ -34,7 +34,7 @@ def run_c_quicksort_wrapper(arr:np.ndarray):
 
     clibrary.custom_quicksort_c(arr, arr.size)
 
-
+def run_c_
 
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
