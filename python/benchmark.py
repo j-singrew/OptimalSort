@@ -21,7 +21,7 @@ def setup_ctype_quicksort():
         ),
         ctypes.c_int,
         ]
-        clibrary.custom_quicksort_c.restype = None  
+        clibrary.custom_quicksort.restype = None  
 
     except Exception as e:
         print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
@@ -32,7 +32,7 @@ def run_c_quicksort_wrapper(arr:np.ndarray):
     if clibrary  is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")   
 
-    clibrary.custom_quicksort_c(arr, arr.size)
+    clibrary.custom_quicksort(arr, arr.size)
 
 def run_c_
 
