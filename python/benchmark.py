@@ -131,8 +131,8 @@ def Benchmark_Cpp_Sort():
     for target in test_targets:
         base_data = target["data"]
 
-        def cpp_sort(arr):
-            run_c_quicksort_wrapper(arr)
+        def cpp_sort(arr,size):
+            run_c_quicksort_wrapper(arr,size)
 
         alg_time = run_iteration_metrics(
             data_arr=base_data,
