@@ -16,3 +16,8 @@ project/
 │   └── plots/              # charts comparing algorithms
 │
 └── README.md
+
+
+
+gcc -fPIC -shared -o custom_sort.so ../cpp/custom_sort.cpp
+python3 benchmark_orchestrator.py
