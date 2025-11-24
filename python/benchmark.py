@@ -82,40 +82,40 @@ def run_c_quicksort_wrapper(arr:np.ndarray):
     if clibrary  is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")   
 
-    clibrary.custom_quicksort(arr, arr.size)
+    clibrary.custom_quicksort(arr)
 
 def run_c_insertion_sort(arr:np.ndarray):
 
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ insertion sort.")   
 
-    clibrary.insertion_sort(arr, arr.size)
+    clibrary.insertion_sort(arr)
 
 def run_c_heap_sort(arr:np.ndarray):
 
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ heap sort.")   
 
-    clibrary.heap_sort(arr, arr.size)
+    clibrary.heap_sort(arr)
 
 def run_c_three_way_quick_sort(arr:np.ndarray):
 
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ 3 way quicksort.")   
 
-    clibrary.three_way_quick_sort(arr, arr.size)
+    clibrary.three_way_quick_sort(arr)
 
 def run_c_shell_sort(arr:np.ndarray):
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ 3 shell sort.")   
 
-    clibrary.shell_sort(arr, arr.size)
+    clibrary.shell_sort(arr)
 
 def run_c_merge_sort(arr:np.ndarray):
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ merge sort.")   
         
-    clibrary.merge_sort(arr, arr.size)
+    clibrary.merge_sort(arr)
 
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
@@ -201,6 +201,14 @@ def Benchmarking_Orchestration():
     return final_results
 
 def Benchmark_Cpp_Sort():
+    cpp_algorithms_to_run = [
+    ("C++ Quick Sort", run_c_quicksort_wrapper),
+    ("C++ Insertion Sort", run_c_insertion_sort),
+    ("C++ heap Sort", run_c_heap_sort),
+    ("C++ three way quicksort Sort",run_c_three_way_quick_sort),
+    ("C++ three way shell Sort",run_c_shell_sort),
+    ("C++ three way merge Sort",run_c_merge_sort),
+]
     if clibrary is None:
         print("C++ library not loaded. Skipping C++ benchmarks.")
         return
@@ -208,29 +216,14 @@ def Benchmark_Cpp_Sort():
     test_targets = prepare_benchmark_targets()
 
     print("\n--- Running C++ Quicksort ---")
-
     for target in test_targets:
-        base_data = target["data"]
-
-        def cpp_sort(arr,size):
-            run_c_quicksort_wrapper(arr,size)
-            run_c_insertion_sort(arr,size)
-            run_c_heap_sort(arr,size)
-            run_c_three_way_quick_sort(arr,size)
-            run_c_shell_sort(arr,size)
-            run_c_merge_sort(arr,size)
-
-
-
-
-
-
-
-        alg_time = run_iteration_metrics(
-            data_arr=base_data,
-            sort_func=cpp_sort,
-            num_runs=Num_RUNS,          
-        )
+        for algs,algo_typ in cpp_algorithms_to_run:
+            base_data = target["data"]
+            alg_time = run_iteration_metrics(
+                data_arr=base_data,
+                sort_func=algo_typ,
+                num_runs=Num_RUNS,          
+            )
         print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
