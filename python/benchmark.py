@@ -13,7 +13,7 @@ def setup_ctype_quicksort():
         print("Sucess conecting c++")
 
 
-        clibrary.custom_quicksort_c.argtypes = [
+        clibrary.custom_quicksort.argtypes = [
         np.ctypeslib.ndpointer(
             dtype=np.intc,
             flags='WRITEABLE',
@@ -22,6 +22,56 @@ def setup_ctype_quicksort():
         ctypes.c_int,
         ]
         clibrary.custom_quicksort.restype = None  
+
+        clibrary.insertion_sort.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=np.intc,
+            flags='WRITEABLE',
+            
+        ),
+        ctypes.c_int,
+        ]
+        clibrary.insertion_sort.restype = None  
+
+        clibrary.heap_sort.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=np.intc,
+            flags='WRITEABLE',
+            
+        ),
+        ctypes.c_int,
+        ]
+        clibrary.heap_sort.restype = None  
+
+        clibrary.three_way_quick_sort.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=np.intc,
+            flags='WRITEABLE',
+            
+        ),
+        ctypes.c_int,
+        ]
+        clibrary.three_way_quick_sort.restype = None  
+
+        clibrary.shell_sort.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=np.intc,
+            flags='WRITEABLE',
+            
+        ),
+        ctypes.c_int,
+        ]
+        clibrary.shell_sort.restype = None  
+
+        clibrary.merge_sort.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=np.intc,
+            flags='WRITEABLE',
+            
+        ),
+        ctypes.c_int,
+        ]
+        clibrary.merge_sort.restype = None  
 
     except Exception as e:
         print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
