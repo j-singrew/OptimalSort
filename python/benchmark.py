@@ -8,12 +8,11 @@ clibrary = None
 
 def setup_ctype_quicksort():
     global clibrary
-
-
     try:
         clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/cpp/custom_sort.so")
         print("Sucess conecting c++")
-        #function signitaure
+
+
         clibrary.custom_quicksort_c.argtypes = [
         np.ctypeslib.ndpointer(
             dtype=np.intc,
@@ -64,7 +63,7 @@ def prepare_benchmark_targets():
     return benchmarks_to_run
 
 def  run_iteration_metrics(data_arr,sort_func,num_runs):
-    
+
     timeit_setup_code = "import numpy as np; data = base_data.copy()" 
     stmt = "sort_func(data)"
 
@@ -140,7 +139,7 @@ def Benchmark_Cpp_Sort():
             sort_func=cpp_sort,
             num_runs=Num_RUNS,          
         )
-        print(f"{target['name']:<30} | C++ Time: {alg_time:.4f} ms")
+        print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
 if __name__ == "__main__":
