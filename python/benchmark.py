@@ -164,6 +164,17 @@ def Benchmark_Cpp_Sort():
 
         def cpp_sort(arr,size):
             run_c_quicksort_wrapper(arr,size)
+            run_c_insertion_sort(arr,size)
+            run_c_heap_sort(arr,size)
+            run_c_three_way_quick_sort(arr,size)
+            run_c_shell_sort(arr,size)
+            run_c_merge_sort(arr,size)
+
+
+
+
+
+
 
         alg_time = run_iteration_metrics(
             data_arr=base_data,
