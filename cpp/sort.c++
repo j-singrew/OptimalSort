@@ -2,8 +2,19 @@
 
 extern "C" {
 void  custom_quicksort( int* arr, int size){
-    printf("Quicksort connection established\n");
-    printf("Got array with size%d\n",size);
+
+    if (size <=1 ){
+        printf("Sorted")
+    }
+    int arr_middle = arr[size/2];
+    int arr_start = arr[0];
+    int arr_end = arr[0 - 1];
+    int pivot = arr_middle + arr_start + arr_end;
+
+    
+
+
+
 }
 }
 
