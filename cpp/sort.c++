@@ -1,20 +1,49 @@
 #include <cstdio>
 
+
 extern "C" {
-void  custom_quicksort( int* arr, int size){
+void swap(int* arr,int i,int j){
+    int holder_variable = arr[i];
+
+    arr[i] = arr[j];
+    arr[j] = holder_variable;
+}
+void  custom_quicksort_partition( int* arr, int size){
 
     if (size <=1 ){
         printf("Sorted")
     }
     int arr_middle = arr[size/2];
-    int arr_start = arr[0];
-    int arr_end = arr[0 - 1];
-    int pivot = arr_middle + arr_start + arr_end;
+    int arr_low= arr[0];
+    int arr_high = arr[size-1];
+    int pivot = (arr_middle + arr_high  + arr_low)/3;
 
-    
+    while(true){
+
+        do {
+            arr_low++;
+        }while(arr[arr_low] < pivot);
+    }
+
+    do {
+        arr_high++;
+    }while(arr[arr_high] > pivot);
+
+    if (arr_low > arr_high){
+        break;
+    };
+
+    swap(arr,arr_low,arr_high);
 
 
 
+}
+void  custom_quicksort( int* arr, int size){
+    custom_quicksort_partition(arr,size);
+
+    for (int i = 0;i < arr[size]; i ++){
+        printf(arr[i]);
+    }
 }
 }
 
