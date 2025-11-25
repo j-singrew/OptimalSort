@@ -1,72 +1,88 @@
 #include <cstdio>
+#include <utility>  
 
+void custom_quicksort_recursive(int* arr, int low, int high);
+int hoare_partition(int* arr, int low, int high);
+
+
+
+
+
+int hoare_partition(int* arr, int low, int high) {
+
+    int pivot = arr[low + (high - low) / 2]; 
+
+    int i = low - 1; 
+    int j = high + 1; 
+
+    while (true) {
+
+        do { i++; } while (arr[i] < pivot);
+
+
+        do { j--; } while (arr[j] > pivot);
+
+
+        if (i >= j) {
+
+            return j; 
+        }
+
+
+        std::swap(arr[i], arr[j]); 
+    }
+}
+
+
+void custom_quicksort_recursive(int* arr, int low, int high) {
+
+    if (low < high) { 
+        
+
+        int split_index = hoare_partition(arr, low, high);
+
+        custom_quicksort_recursive(arr, low, split_index);
+        
+        custom_quicksort_recursive(arr, split_index + 1, high);
+    }
+}
 
 extern "C" {
-void swap(int* arr,int i,int j){
-    int holder_variable = arr[i];
+    
 
-    arr[i] = arr[j];
-    arr[j] = holder_variable;
-}
-int custom_quicksort_partition( int* arr, int low ,int high){
+    void custom_quicksort_c(int* arr, int size) {
 
+        if (size > 1) {
+            custom_quicksort_recursive(arr, 0, size - 1);
+        }
+        printf("--- 1. Quick Sort (Standard) executed successfully ---\n"); 
+    }
+    
+    void c_insertion_sort(int* arr, int size) {
 
-    int arr_low= low - 1;
-    int arr_high = high +1;
-    int pivot = arr[arr_low];
-
-    while(true){
-
-        do {
-            arr_low++;
-        }while(arr[arr_low] < pivot);
+        printf("--- 2. Insertion Sort is active (Ready for logic) ---\n");
     }
 
-    do {
-        arr_high--;
-    }while(arr[arr_high] > pivot);
 
-    if (arr_low >=arr_high){
-        return arr_high;
-    };
+    void c_heapsort(int* arr, int size) {
 
-    swap(arr,arr_low,arr_high);
+        printf("--- 3. Heapsort is active (Ready for logic) ---\n");
+    }
 
 
+    void c_three_way_quicksort(int* arr, int size) {
+ 
+        printf("--- 4. 3-WAY Quick Sort is active (Ready for logic) ---\n");
+    }
 
-}
-void  custom_quicksort( int* arr, int size){
 
-    custom_quicksort_partition(arr,size);
-}
+    void c_shell_sort(int* arr, int size) {
+        printf("--- 5. Shell Sort is active (Ready for logic) ---\n");
+    }
 
-extern "C"{
-    void insertion_sort(int* arr,int size){
-            printf("Insertion Sort is active\n");
+
+    void c_merge_sort(int* arr, int size) {
+
+        printf("--- 6. Merge Sort is active (Ready for logic) ---\n");
     }
 }
-
-extern "C"{
-    void heap_sort(int* arr,int size){
-            printf("Heap Sort is active\n");
-    }
-}
-extern "C"{
-    void three_way_quick_sort(int* arr,int size){
-            printf("3-WAY Quick sort is active\n");
-    }
-}
-
-extern "C"{
-    void shell_sort(int* arr,int size){
-            printf("shell sort is active\n");
-    }
-}
-
-extern "C"{
-    void merge_sort(int* arr,int size){
-            printf("merge sort is active\n");
-    }
-}
-
-
