@@ -10,12 +10,12 @@ N_MEDIUM = 100_000
 N_LARGE  = 1_000_000
 N_UNIQUE = 1000
 SWAP_PERCENTAGE = 0.01
-MASTER_UNSORTED = np.random.randint(low=1, high=10_000_000, size=N_LARGE)
+MASTER_UNSORTED = np.random.randint(low=1, high=10_000_000, size=N_LARGE,dtype=np.intc)
 MASTER_SORTED = np.sort(MASTER_UNSORTED)
 MASTER_REVERSED = MASTER_SORTED[::-1].copy()
-MASTER_UNIQUE = np.arange(N_LARGE)
+MASTER_UNIQUE = np.arange(N_LARGE, dtype=np.intc)
 np.random.shuffle(MASTER_UNIQUE)
-MASTER_DUPLICATE = np.random.randint(low=0, high=N_UNIQUE, size=N_LARGE)
+MASTER_DUPLICATE = np.random.randint(low=0, high=N_UNIQUE, size=N_LARGE,dtype=np.intc)
 
 def generate_Near_Sorted_Array(N:int,swap_percentage: float = SWAP_PERCENTAGE) -> np.ndarray:
 
