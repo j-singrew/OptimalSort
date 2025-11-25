@@ -80,8 +80,8 @@ def setup_ctype_quicksort():
 def run_c_quicksort_wrapper(arr:np.ndarray):
 
     if clibrary  is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")   
-
+        raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")     
+      
     clibrary.custom_quicksort(arr, arr.size)
 
 def run_c_insertion_sort(arr:np.ndarray):
