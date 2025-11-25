@@ -8,15 +8,12 @@ void swap(int* arr,int i,int j){
     arr[i] = arr[j];
     arr[j] = holder_variable;
 }
-void  custom_quicksort_partition( int* arr, int size){
+int custom_quicksort_partition( int* arr, int low ,int high){
 
-    if (size <=1 ){
-        printf("Sorted")
-    }
-    int arr_middle = arr[size/2];
-    int arr_low= arr[0];
-    int arr_high = arr[size-1];
-    int pivot = (arr_middle + arr_high  + arr_low)/3;
+
+    int arr_low= low - 1;
+    int arr_high = high +1;
+    int pivot = arr[arr_low];
 
     while(true){
 
@@ -26,11 +23,11 @@ void  custom_quicksort_partition( int* arr, int size){
     }
 
     do {
-        arr_high++;
+        arr_high--;
     }while(arr[arr_high] > pivot);
 
-    if (arr_low > arr_high){
-        break;
+    if (arr_low >=arr_high){
+        return arr_high;
     };
 
     swap(arr,arr_low,arr_high);
@@ -39,12 +36,8 @@ void  custom_quicksort_partition( int* arr, int size){
 
 }
 void  custom_quicksort( int* arr, int size){
-    custom_quicksort_partition(arr,size);
 
-    for (int i = 0;i < arr[size]; i ++){
-        printf(arr[i]);
-    }
-}
+    custom_quicksort_partition(arr,size);
 }
 
 extern "C"{
