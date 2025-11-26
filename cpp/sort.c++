@@ -1,5 +1,6 @@
 #include <cstdio>
-#include <utility>  
+#include <utility>
+#include<vector>
 
 void custom_quicksort_recursive(int* arr, int low, int high);
 int hoare_partition(int* arr, int low, int high);
@@ -46,6 +47,30 @@ void custom_quicksort_recursive(int* arr, int low, int high) {
         custom_quicksort_recursive(arr, split_index + 1, high);
     }
 }
+void heapify(int* arr, int n, int i){
+
+    int largest = i;
+
+    int l = 2 * i +1;
+
+    int r = 2 * i + 2;
+
+
+    if (l < n && arr[l] > arr[largest])
+        largest = l;
+
+    if (r < n && arr[r] > arr[largest])
+        largest = r;
+
+    if (largest != i){
+        std::swap(arr[i], arr[largest]);
+
+        heapify(arr,n,largest);
+    }   
+}
+
+
+
 
 extern "C" {
     
@@ -75,7 +100,17 @@ extern "C" {
     }
 
 
-    void c_heapsort(int* arr, int size) {
+    void c_heapsort(int* arr, int n) {
+
+        for (int i = n / 2-1;i>= 0;i--)
+            heapify(arr,n,i);
+
+        for (int i = n -1; i> 0;i--){
+
+            std::swap(arr[0], arr[i]);
+            heapify(arr, i, 0);
+        }
+
 
         printf("--- 3. Heapsort is active (Ready for logic) ---\n");
     }
