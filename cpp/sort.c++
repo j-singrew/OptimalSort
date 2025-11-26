@@ -1,5 +1,6 @@
 #include <cstdio>
-#include <utility>  
+#include <utility>
+#include<vector>
 
 void custom_quicksort_recursive(int* arr, int low, int high);
 int hoare_partition(int* arr, int low, int high);
@@ -46,6 +47,30 @@ void custom_quicksort_recursive(int* arr, int low, int high) {
         custom_quicksort_recursive(arr, split_index + 1, high);
     }
 }
+void heapify(int* arr, int n, int i){
+
+    int largest = i;
+
+    int l = 2 * i +1;
+
+    int r = 2 * i + 2;
+
+
+    if (l < n && arr[l] > arr[largest])
+        largest = l;
+
+    if (r < n && arr[r] > arr[largest])
+        largest = r;
+
+    if (largest != i){
+        std::swap(arr[i], arr[largest]);
+
+        heapify(arr,n,largest);
+    }   
+}
+
+
+
 
 extern "C" {
     
@@ -58,13 +83,34 @@ extern "C" {
         printf("--- 1. Quick Sort (Standard) executed successfully ---\n"); 
     }
     
-    void c_insertion_sort(int* arr, int size) {
+    void c_insertion_sort(int* arr, int n) {
 
-        printf("--- 2. Insertion Sort is active (Ready for logic) ---\n");
+        
+        for(int i = 1;i< n;++i){
+            int key = arr[i];
+            int j = i -1;
+
+            while(j >= 0 && arr[j] > key){
+                arr[j+1] = arr[j];
+                j = j - 1;
+            }
+            arr[j + 1] = key;
+        }
+        printf("--- 2. Insertion Sort executed successfully ---\n");
     }
 
 
-    void c_heapsort(int* arr, int size) {
+    void c_heapsort(int* arr, int n) {
+
+        for (int i = n / 2-1;i>= 0;i--)
+            heapify(arr,n,i);
+
+        for (int i = n -1; i> 0;i--){
+
+            std::swap(arr[0], arr[i]);
+            heapify(arr, i, 0);
+        }
+
 
         printf("--- 3. Heapsort is active (Ready for logic) ---\n");
     }
