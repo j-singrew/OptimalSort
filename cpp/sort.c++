@@ -61,6 +61,7 @@ void  three_way_partition(int* arr,int low,int high ,int& i,int& j){
         }
         i = low -1;
         j = mid;
+        three_way_partition(arr, low, high, i, j);
     }
 
 }
@@ -152,7 +153,7 @@ extern "C" {
 
         int i,j;
 
-        three_way_partition(arr,low,high,i ,j);
+        three_way_partition(arr, low, high, i, j);
     }
 
 
