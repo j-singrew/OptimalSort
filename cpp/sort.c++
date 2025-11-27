@@ -7,7 +7,7 @@ int hoare_partition(int* arr, int low, int high);
 void three_way_partition(int* arr, int low, int high, int& i, int& j);
 
 void three_way_quicksort_recursive(int* arr, int low, int high){
-    if(low < high){
+    if(low > high){
         return;
     }
 
