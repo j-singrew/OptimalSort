@@ -48,9 +48,9 @@ void  three_way_partition(int* arr,int low,int high ,int& i,int& j){
     int pivot = arr[high];
     while (mid <= high){
         if (arr[mid] <  pivot){
-            int fin_low = low++;
-            int fin_min = mid++;
-            std::swap(arr[fin_low], arr[fin_min]);
+            std::swap(arr[low], arr[mid]);
+            low++;
+            mid++;
         }
         else if (arr[mid] == pivot){
             mid++;
