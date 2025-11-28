@@ -1,6 +1,7 @@
 from dataset import DataGeneration
 import numpy  as np
 import timeit
+import os
 import ctypes
 
 dataset = DataGeneration()
@@ -9,74 +10,92 @@ clibrary = None
 def setup_ctype_quicksort():
     global clibrary
     try:
-        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/python/custom_sort.so")
+        # Attempt 1: Load the library directly by name (fastest, relies on OS path)
+        clibrary = ctypes.CDLL('custom_sort.so')
 
-        print("Sucess conecting c++")
-
-
-        clibrary.custom_quicksort.argtypes = [
-        np.ctypeslib.ndpointer(
-            dtype=np.intc,
-            flags='WRITEABLE',
+    except OSError:
+        # If Attempt 1 fails (most common), try Attempt 2: Load using the absolute path
+        try:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            library_path = os.path.join(current_dir, 'custom_sort.so')
             
-        ),
-        ctypes.c_int,
-        ]
-        clibrary.custom_quicksort.restype = None  
-
-        clibrary.insertion_sort.argtypes = [
-        np.ctypeslib.ndpointer(
-            dtype=np.intc,
-            flags='WRITEABLE',
+            # CRITICAL FIX: Execute the second load attempt and assign to clibrary
+            clibrary = ctypes.CDLL(library_path)
             
-        ),
-        ctypes.c_int,
-        ]
-        clibrary.insertion_sort.restype = None  
-
-        clibrary.heap_sort.argtypes = [
-        np.ctypeslib.ndpointer(
-            dtype=np.intc,
-            flags='WRITEABLE',
+        except Exception as inner_e:
+            # If Attempt 2 also fails (e.g., path is still wrong or file is corrupted)
+            clibrary = None
+            print(f"[WARNING] Secondary load attempt failed: {type(inner_e).__name__}.")
+    if clibrary is not None:
             
-        ),
-        ctypes.c_int,
-        ]
-        clibrary.heap_sort.restype = None  
+            try:
+                print("Sucess conecting c++")
+                print("Sucess conecting c++")
 
-        clibrary.three_way_quick_sort.argtypes = [
-        np.ctypeslib.ndpointer(
-            dtype=np.intc,
-            flags='WRITEABLE',
-            
-        ),
-        ctypes.c_int,
-        ]
-        clibrary.three_way_quick_sort.restype = None  
 
-        clibrary.shell_sort.argtypes = [
-        np.ctypeslib.ndpointer(
-            dtype=np.intc,
-            flags='WRITEABLE',
-            
-        ),
-        ctypes.c_int,
-        ]
-        clibrary.shell_sort.restype = None  
+                clibrary.custom_quicksort.argtypes = [
+                np.ctypeslib.ndpointer(
+                    dtype=np.intc,
+                    flags='WRITEABLE',
 
-        clibrary.merge_sort.argtypes = [
-        np.ctypeslib.ndpointer(
-            dtype=np.intc,
-            flags='WRITEABLE',
-            
-        ),
-        ctypes.c_int,
-        ]
-        clibrary.merge_sort.restype = None  
+                ),
+                ctypes.c_int,
+                ]
+                clibrary.custom_quicksort.restype = None  
 
-    except Exception as e:
-        print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
-        clibrary = None
+                clibrary.insertion_sort.argtypes = [
+                np.ctypeslib.ndpointer(
+                    dtype=np.intc,
+                    flags='WRITEABLE',
+
+                ),
+                ctypes.c_int,
+                ]
+                clibrary.insertion_sort.restype = None  
+
+                clibrary.heap_sort.argtypes = [
+                np.ctypeslib.ndpointer(
+                    dtype=np.intc,
+                    flags='WRITEABLE',
+
+                ),
+                ctypes.c_int,
+                ]
+                clibrary.heap_sort.restype = None  
+
+                clibrary.three_way_quick_sort.argtypes = [
+                np.ctypeslib.ndpointer(
+                    dtype=np.intc,
+                    flags='WRITEABLE',
+
+                ),
+                ctypes.c_int,
+                ]
+                clibrary.three_way_quick_sort.restype = None  
+
+                clibrary.shell_sort.argtypes = [
+                np.ctypeslib.ndpointer(
+                    dtype=np.intc,
+                    flags='WRITEABLE',
+
+                ),
+                ctypes.c_int,
+                ]
+                clibrary.shell_sort.restype = None  
+
+                clibrary.merge_sort.argtypes = [
+                np.ctypeslib.ndpointer(
+                    dtype=np.intc,
+                    flags='WRITEABLE',
+
+                ),
+                ctypes.c_int,
+                ]
+                clibrary.merge_sort.restype = None  
+
+            except Exception as e:
+                print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
+                clibrary = None
 
 def run_c_quicksort_wrapper(arr:np.ndarray):
 
