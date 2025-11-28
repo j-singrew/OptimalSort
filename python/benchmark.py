@@ -74,7 +74,7 @@ def setup_ctype_quicksort():
         ]
         clibrary.merge_sort.restype = None  
 
-    except Exception as e:r
+    except Exception as e:
         print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
         clibrary = None
 
