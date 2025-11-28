@@ -6,14 +6,11 @@ import ctypes
 
 dataset = DataGeneration()
 clibrary = None
-
-def setup_ctype_quicksort():
-    global clibrary
-    try:
+try:
         # Attempt 1: Load the library directly by name (fastest, relies on OS path)
         clibrary = ctypes.CDLL('custom_sort.so')
 
-    except OSError:
+except OSError:
         # If Attempt 1 fails (most common), try Attempt 2: Load using the absolute path
         try:
             current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,14 +23,14 @@ def setup_ctype_quicksort():
             # If Attempt 2 also fails (e.g., path is still wrong or file is corrupted)
             clibrary = None
             print(f"[WARNING] Secondary load attempt failed: {type(inner_e).__name__}.")
-    if clibrary is not None:
+        if clibrary is not None:
             
             try:
                 print("Sucess conecting c++")
-                print("Sucess conecting c++")
+    
 
 
-                clibrary.custom_quicksort.argtypes = [
+                clibrary.custom_quicksort_c.argtypes = [
                 np.ctypeslib.ndpointer(
                     dtype=np.intc,
                     flags='WRITEABLE',
@@ -41,7 +38,7 @@ def setup_ctype_quicksort():
                 ),
                 ctypes.c_int,
                 ]
-                clibrary.custom_quicksort.restype = None  
+                clibrary.custom_quicksort_c.restype = None  
 
                 clibrary.insertion_sort.argtypes = [
                 np.ctypeslib.ndpointer(
@@ -97,12 +94,13 @@ def setup_ctype_quicksort():
                 print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
                 clibrary = None
 
+
 def run_c_quicksort_wrapper(arr:np.ndarray):
 
     if clibrary  is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")     
       
-    clibrary.custom_quicksort(arr, arr.size)
+    clibrary.custom_quicksort_c(arr,arr.size)
 
 def run_c_insertion_sort(arr:np.ndarray):
 
@@ -248,6 +246,5 @@ def Benchmark_Cpp_Sort():
 
 
 if __name__ == "__main__":
-    setup_ctype_quicksort()
     Benchmarking_Orchestration()
     Benchmark_Cpp_Sort()
