@@ -4,8 +4,21 @@
 
 void custom_quicksort_recursive(int* arr, int low, int high);
 int hoare_partition(int* arr, int low, int high);
+void three_way_partition(int* arr, int low, int high, int& i, int& j);
+
+void three_way_quicksort_recursive(int* arr, int low, int high){
+    if(low >= high){
+        return;
+    }
+
+    int i,j;
+
+    three_way_partition(arr, low, high, i, j);
+    three_way_quicksort_recursive(arr, low, i);  
+    three_way_quicksort_recursive(arr, j, high);
 
 
+}
 
 
 
@@ -34,6 +47,37 @@ int hoare_partition(int* arr, int low, int high) {
     }
 }
 
+void  three_way_partition(int* arr,int low,int high ,int& i,int& j){
+    
+    if(high - low <= 1){
+        if (arr[high] < arr[low])
+            std::swap(arr[high],arr[low]);
+        i = low;
+        j = high;
+        return;
+    }
+
+    int mid = low;
+    int pivot = arr[high];
+    while (mid <= high){
+        if (arr[mid] <  pivot){
+            std::swap(arr[low], arr[mid]);
+            low++;
+            mid++;
+        }
+        else if (arr[mid] == pivot){
+            mid++;
+        }
+        else if (arr[mid] > pivot){
+            std::swap(arr[mid],arr[high--]);
+        
+        }
+        i = low -1;
+        j = mid;
+
+    }
+
+}
 
 void custom_quicksort_recursive(int* arr, int low, int high) {
 
@@ -117,8 +161,12 @@ extern "C" {
 
 
     void c_three_way_quicksort(int* arr, int size) {
- 
-        printf("--- 4. 3-WAY Quick Sort is active (Ready for logic) ---\n");
+        int high  = size-1;
+        int low = 0;
+
+        int i,j;
+        three_way_quicksort_recursive(arr, low,high);
+
     }
 
 
