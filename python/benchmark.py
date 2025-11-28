@@ -31,12 +31,8 @@ except OSError:
 
 
                 clibrary.custom_quicksort_c.argtypes = [
-                np.ctypeslib.ndpointer(
-                    dtype=np.intc,
-                    flags='WRITEABLE',
-
-                ),
-                ctypes.c_int,
+                    ctypes.POINTER(ctypes.c_int), 
+                    ctypes.c_int,
                 ]
                 clibrary.custom_quicksort_c.restype = None  
 
@@ -99,9 +95,10 @@ def run_c_quicksort_wrapper(arr:np.ndarray):
 
     if clibrary  is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")     
-      
-    clibrary.custom_quicksort_c(arr,arr.size)
-
+    arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
+    c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
+    clibrary.custom_quicksort_c(c_arr_pointer, arr_c_compatible.size)
+    
 def run_c_insertion_sort(arr:np.ndarray):
 
     if clibrary is None:
