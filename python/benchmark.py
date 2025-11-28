@@ -83,9 +83,10 @@ def run_c_insertion_sort(arr:np.ndarray):
 
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ insertion sort.")   
+    
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.insertion_sort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_insertion_sort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_heap_sort(arr:np.ndarray):
 
@@ -93,7 +94,7 @@ def run_c_heap_sort(arr:np.ndarray):
         raise RuntimeError("C++ library not loaded. Cannot run C++ heap sort.")   
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.custom_quicksort_c(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_heapsort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_three_way_quick_sort(arr:np.ndarray):
 
@@ -102,7 +103,7 @@ def run_c_three_way_quick_sort(arr:np.ndarray):
 
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.three_way_quick_sort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_three_way_quicksort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_shell_sort(arr:np.ndarray):
     if clibrary is None:
@@ -110,7 +111,7 @@ def run_c_shell_sort(arr:np.ndarray):
 
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.shell_sort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_shell_sort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_merge_sort(arr:np.ndarray):
     if clibrary is None:
@@ -118,7 +119,7 @@ def run_c_merge_sort(arr:np.ndarray):
         
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.merge_sort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_merge_sort(c_arr_pointer, arr_c_compatible.size)
 
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
