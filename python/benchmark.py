@@ -9,7 +9,7 @@ clibrary = None
 def setup_ctype_quicksort():
     global clibrary
     try:
-        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/custom_sort.so")
+        clibrary = ctypes.CDLL("/Users/joshuasingrew/Desktop/GitHub/New Folder With Items/my_new_africon_app/OptimalSort/python/custom_sort.so")
 
         print("Sucess conecting c++")
 
