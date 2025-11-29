@@ -111,26 +111,26 @@ def run_c_heap_sort(arr:np.ndarray):
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ heap sort.")   
 
-    clibrary.heap_sort(arr, arr.size)
+    clibrary.c_heapsort(arr, arr.size)
 
 def run_c_three_way_quick_sort(arr:np.ndarray):
 
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ 3 way quicksort.")   
 
-    clibrary.three_way_quick_sort(arr, arr.size)
+    clibrary.c_three_way_quicksort(arr, arr.size)
 
 def run_c_shell_sort(arr:np.ndarray):
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ 3 shell sort.")   
 
-    clibrary.shell_sort(arr, arr.size)
+    clibrary.c_shell_sort(arr, arr.size)
 
 def run_c_merge_sort(arr:np.ndarray):
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ merge sort.")   
         
-    clibrary.merge_sort(arr, arr.size)
+    clibrary.c_merge_sort(arr, arr.size)
 
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
