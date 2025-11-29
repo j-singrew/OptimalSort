@@ -59,32 +59,25 @@ void  merge_recursive(int* arr,int left,int mid,int right){
         k++;
     }
 
+
     while (j < n2) {
         arr[k] = R[j];
         j++;
         k++;
     }
 }
-int hoare_partition(int* arr, int low, int high) {
+int Lomuto_partition(int* arr, int size) {
 
-    int pivot = arr[low + (high - low) / 2]; 
+    int pivot = arr[size - 1];
 
-    int i = low - 1; 
-    int j = high + 1; 
-
-    while (true) {
-
-        do { i++; } while (arr[i] < pivot);
-
-        do { j--; } while (arr[j] > pivot);
-
-        if (i >= j) {
-
-            return j; 
+    int i = -1;
+    for (int j = 0; j< size;j++){
+        if (arr[j] < pivot){
+            i++;
+            std::swap(arr[i],arr[j]);
         }
-
-        std::swap(arr[i], arr[j]); 
     }
+      	std::swap(arr[i + 1], arr[size - 1]);
 }
 
 void  three_way_partition(int* arr,int low,int high ,int& i,int& j){
@@ -126,7 +119,7 @@ void custom_quicksort_recursive(int* arr, int low, int high) {
 
     if (low < high) { 
         
-        int split_index = hoare_partition(arr, low, high);
+        int split_index = Lomuto_partition(arr, low, high);
 
         custom_quicksort_recursive(arr, low, split_index);
         
