@@ -222,6 +222,8 @@ def Benchmark_Cpp_Sort():
     print("\n--- Running C++ Quicksort ---")
     for target in test_targets:
         for algs,algo_typ in cpp_algorithms_to_run:
+            if algs =="C++ Insertion Sort" and target['N'] > 100000:
+                alg_time = 99999.0           
             base_data = target["data"]
             alg_time = run_iteration_metrics(
                 data_arr=base_data,
