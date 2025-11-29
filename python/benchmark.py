@@ -36,35 +36,35 @@ except OSError:
                 ]
                 clibrary.custom_quicksort_c.restype = None  
 
-                clibrary.insertion_sort.argtypes = [
+                clibrary.c_insertion_sort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
                     ctypes.c_int,
                 ]
-                clibrary.insertion_sort.restype = None  
+                clibrary.c_insertion_sort.restype = None  
 
-                clibrary.heap_sort.argtypes = [
+                clibrary.c_heapsort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
                     ctypes.c_int,
                 ]
-                clibrary.heap_sort.restype = None  
+                clibrary.c_heapsort.restype = None  
 
-                clibrary.three_way_quick_sort.argtypes = [
+                clibrary.c_three_way_quick_sort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
                     ctypes.c_int,
                 ]
-                clibrary.three_way_quick_sort.restype = None  
+                clibrary.c_three_way_quick_sort.restype = None  
 
-                clibrary.shell_sort.argtypes = [
+                clibrary.c_shell_sort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
                     ctypes.c_int,
                 ]
-                clibrary.shell_sort.restype = None  
+                clibrary.c_shell_sort.restype = None  
 
-                clibrary.merge_sort.argtypes = [
+                clibrary.c_merge_sort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
                     ctypes.c_int,
                 ]
-                clibrary.merge_sort.restype = None  
+                clibrary.c_merge_sort.restype = None  
 
             except Exception as e:
                 print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
