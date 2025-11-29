@@ -222,15 +222,16 @@ def Benchmark_Cpp_Sort():
     print("\n--- Running C++ Quicksort ---")
     for target in test_targets:
         for algs,algo_typ in cpp_algorithms_to_run:
-            if algs =="C++ Insertion Sort" and target['N'] > 100000:
-                alg_time = 99999.0           
-            base_data = target["data"]
-            alg_time = run_iteration_metrics(
+            if (algs =="C++ Insertion Sort" or algs =="C++ three way shell Sort")   and target['N'] > 100000:
+                alg_time = 99999.0 
+            else:          
+                base_data = target["data"]
+                alg_time = run_iteration_metrics(
                 data_arr=base_data,
                 sort_func=algo_typ,
                 num_runs=Num_RUNS,          
-            )
-        print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
+                )
+            print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
 if __name__ == "__main__":
