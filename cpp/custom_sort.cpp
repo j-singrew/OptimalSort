@@ -14,6 +14,19 @@ void three_way_partition(int* arr, int low, int high, int& i, int& j);
 void three_way_quicksort_recursive(int* arr, int low, int high);
 void heapify(int* arr, int n, int i);
 
+// --- THE MISSING 3-WAY RECURSIVE DEFINITION ---
+
+void three_way_quicksort_recursive(int* arr, int low, int high) {
+
+    if (low >= high) {
+        return;
+    }
+    
+    int i, j; 
+    three_way_partition(arr, low, high, i, j); 
+    three_way_quicksort_recursive(arr, low, i);
+    three_way_quicksort_recursive(arr, j, high);
+}
 
 void mergeSort_recursive(int* arr, int left, int right){
     
@@ -66,18 +79,26 @@ void  merge_recursive(int* arr,int left,int mid,int right){
         k++;
     }
 }
-int Lomuto_partition(int* arr, int size) {
+int Lomuto_partition(int* arr, int low, int high) {
 
-    int pivot = arr[size - 1];
+    int pivot = arr[high]; 
 
-    int i = -1;
-    for (int j = 0; j< size;j++){
-        if (arr[j] < pivot){
-            i++;
-            std::swap(arr[i],arr[j]);
+
+    int i = low - 1; 
+
+
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] <= pivot) {
+            i++; 
+            std::swap(arr[i], arr[j]);
         }
     }
-      	std::swap(arr[i + 1], arr[size - 1]);
+
+    std::swap(arr[i + 1], arr[high]);
+    
+  
+    return (i + 1);
+
 }
 
 void  three_way_partition(int* arr,int low,int high ,int& i,int& j){
@@ -115,15 +136,15 @@ void  three_way_partition(int* arr,int low,int high ,int& i,int& j){
 
 }
 
-void custom_quicksort_recursive(int* arr, int low, int high) {
+void custom_quicksort_recursive(int* arr,int low ,int high) {
 
     if (low < high) { 
         
-        int split_index = Lomuto_partition(arr, low, high);
+        int split_index = Lomuto_partition(arr,low,high);
 
-        custom_quicksort_recursive(arr, low, split_index);
+        custom_quicksort_recursive(arr, low, split_index - 1);
         
-        custom_quicksort_recursive(arr, split_index + 1, high);
+        custom_quicksort_recursive(arr, split_index + 1, high); 
     }
 }
 void heapify(int* arr, int n, int i){
@@ -198,7 +219,7 @@ extern "C" {
 
     void c_three_way_quicksort(int* arr, int size) {
    
-        three_way_quicksort_recursive(arr, 0, size - 1);
+        custom_quicksort_recursive(arr, 0, size - 1);
         printf("--- 4. Three-Way Quicksort executed successfully ---\n");
     }
 
