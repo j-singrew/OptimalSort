@@ -104,7 +104,7 @@ def run_c_insertion_sort(arr:np.ndarray):
     if clibrary is None:
         raise RuntimeError("C++ library not loaded. Cannot run C++ insertion sort.")   
 
-    clibrary.insertion_sort(arr, arr.size)
+    clibrary.c_insertion_sort(arr, arr.size)
 
 def run_c_heap_sort(arr:np.ndarray):
 
