@@ -3,25 +3,30 @@ import numpy  as np
 import timeit
 import os
 import ctypes
+import csv
+from typing import List, Dict, Any
 
 dataset = DataGeneration()
 clibrary = None
+final_results = []
 Time_Threshold = 1000
+NUM_RUNS = 5
+
 try:
-        # Attempt 1: Load the library directly by name (fastest, relies on OS path)
+ 
         clibrary = ctypes.CDLL('custom_sort.so')
 
 except OSError:
-        # If Attempt 1 fails (most common), try Attempt 2: Load using the absolute path
+
         try:
             current_dir = os.path.dirname(os.path.abspath(__file__))
             library_path = os.path.join(current_dir, 'custom_sort.so')
             
-            # CRITICAL FIX: Execute the second load attempt and assign to clibrary
+       
             clibrary = ctypes.CDLL(library_path)
             
         except Exception as inner_e:
-            # If Attempt 2 also fails (e.g., path is still wrong or file is corrupted)
+         
             clibrary = None
             print(f"[WARNING] Secondary load attempt failed: {type(inner_e).__name__}.")
         if clibrary is not None:
@@ -71,6 +76,21 @@ except OSError:
                 print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
                 clibrary = None
 
+def permanente_storage(run_data):
+
+    if not run_data:
+        print("Error: No data records found to save.")
+        return
+
+    try:
+
+        with open('ds.csv','w',newline='',encoding='utf-8') as csvfiles:
+            writer = csv.DictWriter(csvfiles)
+            writer.writeheader()
+            writer.writerow(run_data)
+
+    except Exception as e:
+        print(f"\n[ERROR] Failed to save benchmark data to CSV: {e}")
 
 def run_c_quicksort_wrapper(arr:np.ndarray):
 
@@ -104,7 +124,7 @@ def run_c_three_way_quick_sort(arr:np.ndarray):
 
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_three_way_quicksort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_three_way_quick_sort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_shell_sort(arr:np.ndarray):
     if clibrary is None:
@@ -168,7 +188,6 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
 
 
 def Benchmarking_Orchestration():
-    NUM_RUNS = 5
 
     test_targets = prepare_benchmark_targets()
 
@@ -178,7 +197,7 @@ def Benchmarking_Orchestration():
         ("NumPy Sort", lambda arr: np.sort(arr))
     ]
 
-    final_results = []
+
 
     for algo_name ,algo_typ in  algorithms_to_run:
 
@@ -217,10 +236,9 @@ def Benchmark_Cpp_Sort():
     if clibrary is None:
         print("C++ library not loaded. Skipping C++ benchmarks.")
         return
-    Num_RUNS = 5
+
     test_targets = prepare_benchmark_targets()
 
-    print("\n--- Running C++ Quicksort ---")
     for target in test_targets:
         for algs,algo_typ in cpp_algorithms_to_run:
             if (algs =="C++ Insertion Sort" or algs =="C++ three way shell Sort")   and target['N'] > 100000:
@@ -230,13 +248,27 @@ def Benchmark_Cpp_Sort():
                 alg_time = run_iteration_metrics(
                 data_arr=target["data"],
                 sort_func=algo_typ,
-                num_runs=Num_RUNS,          
+                num_runs=NUM_RUNS,          
                 )
             if alg_time >= Time_Threshold:
                 final_time = 99999.0
             else:
-                    final_time = alg_time
-                    
+                final_time = alg_time
+
+
+
+            final_record = {
+                "algorithm_name":  algs,
+                "data_pattern": target['name'].split('_')[0],
+                "size_category": target['name'].split('_')[-1],
+                "N": target['N'],
+                "avg_time_ms":  alg_time,
+                "num_runs": NUM_RUNS,
+                "comparisons": 0, 
+                "swaps": 0      
+            }
+            final_results.append(final_record)
+            print(f"final record is ",final_record)
             print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
