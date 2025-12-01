@@ -104,7 +104,7 @@ def run_c_three_way_quick_sort(arr:np.ndarray):
 
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_three_way_quicksort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_three_way_quick_sort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_shell_sort(arr:np.ndarray):
     if clibrary is None:
