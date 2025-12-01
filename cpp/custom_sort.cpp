@@ -226,11 +226,22 @@ void heapify(int* arr, int n, int i){
 
 
 void shell_sort_impl(int* arr, int size) {
+
+    if (G_FAIL_FLAG) return;
+
     for (int gap = size/2;gap > 0;gap /=2){
         for (int i = gap;i < size;i++){
             int temp = arr[i];
             int j = i;
             while (j >=gap && arr[j - gap] > temp){
+                itereration_couter++;
+                if (itereration_couter > max_iterate_count) { 
+                    G_FAIL_FLAG = true; 
+                    return; 
+                }
+                
+     
+                itereration_couter++;
                 arr[j] = arr[j - gap];
                 j-=gap;
             }
@@ -252,25 +263,42 @@ extern "C" {
     
 
     void c_insertion_sort(int* arr, int n) {
+        if (G_FAIL_FLAG) return;
         for(int i = 1;i< n;++i){
             int key = arr[i];
             int j = i -1;
             while(j >= 0 && arr[j] > key){
-                arr[j+1] = arr[j];
-                j = j - 1;
+
+                itereration_couter++;
+                if (itereration_couter > max_iterate_count) { 
+                    G_FAIL_FLAG = true; 
+                    return; 
+                }
+                if (arr[j] > key) {
+
+                G_OPERATION_COUNT++; 
+                
+                    arr[j + 1] = arr[j];
+                    j = j - 1;
+                } else {
+                    break; 
             }
-            arr[j + 1] = key;
+        }
         }
         printf("--- 2. Insertion Sort executed successfully ---\n");
     }
 
 
     void c_heapsort(int* arr, int n) {
-        for (int i = n / 2-1;i>= 0;i--)
-            heapify(arr,n,i);
+        if (G_FAIL_FLAG) return;
+        
+        for (int i = n / 2-1;i>= 0;i--){
 
+            heapify(arr,n,i);
+        }
         for (int i = n -1; i> 0;i--){
-            std::swap(arr[0], arr[i]);
+
+            std::swap(arr[0], arr[i]);      
             heapify(arr, i, 0);
         }
         printf("--- 3. Heapsort executed successfully ---\n");
