@@ -107,13 +107,13 @@ void three_way_partition(int* arr, int low, int high, int& i, int& j) {
 }
 
 void three_way_quicksort_recursive(int* arr, int low, int high) {
-    itereration_couter++;
-    if  (itereration_couter > max_iterate_count) {
-            G_FAIL_FLAG = true; return; 
-    };
+
     if (low >= high) {
         return;
     }
+    if  (G_FAIL_FLAG) {
+            return; 
+    };
     int i, j;
     three_way_partition(arr, low, high, i, j);
 
@@ -125,15 +125,20 @@ void three_way_quicksort_recursive(int* arr, int low, int high) {
 
 
 void mergeSort_recursive(int* arr, int left, int right){
-    
+    itereration_couter++;
     if (left >= right)
         return;
 
+    if  (itereration_couter > max_iterate_count) {
+            G_FAIL_FLAG = true; return; 
+    };
+
     int mid = left + (right - left) / 2;
+
+    merge_recursive(arr, left, mid, right);
     mergeSort_recursive(arr, left, mid);
     mergeSort_recursive(arr, mid + 1, right);
 
-    merge_recursive(arr, left, mid, right);
 }
 
 void  merge_recursive(int* arr,int left,int mid,int right){
