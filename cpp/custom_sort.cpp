@@ -3,9 +3,9 @@
 #include <vector>
 #include <cstring> 
 
-int max_iterate_count = 10000000;
+int MAX_ITERATE_COUNT = 10000000;
 volatile bool G_FAIL_FLAG = false;
-volatile long long itereration_couter = 0;
+volatile long long ITERATION_COUNTER  = 0;
 
 void custom_quicksort_recursive(int* arr, int low, int high);
 int Lomuto_partition(int* arr, int low, int high);
@@ -24,19 +24,18 @@ int Lomuto_partition(int* arr, int low, int high) {
 
     int pivot = arr[high]; 
     int i = low - 1; 
-    if (itereration_couter > max_iterate_count){
+    if (ITERATION_COUNTER > MAX_ITERATE_COUNT){
         G_FAIL_FLAG = true;
-        return;
     }
     for (int j = low; j <= high - 1; j++) {
-        itereration_couter++;
+       ITERATION_COUNTER ++;
         if (arr[j] <= pivot) {
             i++; 
             std::swap(arr[i], arr[j]);
-            itereration_couter++;
+            ITERATION_COUNTER ++;
         }
     }
-    itereration_couter++;
+    ITERATION_COUNTER ++;
     std::swap(arr[i + 1], arr[high]);
     
     return (i + 1);
@@ -57,16 +56,16 @@ void custom_quicksort_recursive(int* arr,int low ,int high) {
 
 
 void three_way_partition(int* arr, int low, int high, int& i, int& j) {
-    itereration_couter++;
-    if  (itereration_couter > max_iterate_count) {
+    ITERATION_COUNTER ++;
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
          G_FAIL_FLAG = true; return; 
         }
     
     if (high - low <= 1) {
 
         if (arr[high] < arr[low])
-            itereration_couter++;
-            itereration_couter++;
+            ITERATION_COUNTER++;
+            ITERATION_COUNTER ++;
             std::swap(arr[high], arr[low]);
         }else{
             i = low;
@@ -80,24 +79,24 @@ void three_way_partition(int* arr, int low, int high, int& i, int& j) {
     int pivot = arr[low]; 
 
     while (mid <= gt) {
-        itereration_couter++;
-        if  (itereration_couter > max_iterate_count) {
+        ITERATION_COUNTER ++;
+        if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
             G_FAIL_FLAG = true; return; 
         };
 
         if (arr[mid] < pivot) {
-            itereration_couter++;
+            ITERATION_COUNTER++;
             std::swap(arr[lt], arr[mid]);
             lt++;
             mid++;
         
         }
         else if (arr[mid] > pivot) {
-            itereration_couter+=2;
+            ITERATION_COUNTER +=2;
             std::swap(arr[mid], arr[gt]);
             gt--;
         } else {
-            itereration_couter++;
+            ITERATION_COUNTER ++;
             mid++;
         }
     }
@@ -111,8 +110,12 @@ void three_way_quicksort_recursive(int* arr, int low, int high) {
     if (low >= high) {
         return;
     }
+    if  (G_FAIL_FLAG) {
+            return; 
+    };
     int i, j;
     three_way_partition(arr, low, high, i, j);
+
     three_way_quicksort_recursive(arr, low, i);
     three_way_quicksort_recursive(arr, j, high);
 }
@@ -121,15 +124,20 @@ void three_way_quicksort_recursive(int* arr, int low, int high) {
 
 
 void mergeSort_recursive(int* arr, int left, int right){
-    
+    ITERATION_COUNTER ++;
     if (left >= right)
         return;
 
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
+            G_FAIL_FLAG = true; return; 
+    };
+
     int mid = left + (right - left) / 2;
+
+    merge_recursive(arr, left, mid, right);
     mergeSort_recursive(arr, left, mid);
     mergeSort_recursive(arr, mid + 1, right);
 
-    merge_recursive(arr, left, mid, right);
 }
 
 void  merge_recursive(int* arr,int left,int mid,int right){
@@ -137,15 +145,27 @@ void  merge_recursive(int* arr,int left,int mid,int right){
     int n2 = right - mid;
 
     std::vector<int> L(n1), R(n2);
+    if (G_FAIL_FLAG) return;
+
     for (int i = 0;i < n1;i++)
+
         L[i] = arr[left + i];
+
+
     for (int j= 0;j<n2;j++)
+
         R[j] = arr[mid + 1 + j];
 
     int i = 0, j = 0;
     int k = left;
 
+
     while (i < n1 && j < n2){
+        ITERATION_COUNTER ++;
+        if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
+            G_FAIL_FLAG = true; return; 
+        };
+
         if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;
@@ -156,14 +176,16 @@ void  merge_recursive(int* arr,int left,int mid,int right){
         }
         k++;
     }
-    
     while (i < n1) {
+        if (G_FAIL_FLAG) return;
         arr[k] = L[i];
         i++;
         k++;
+
     }
 
     while (j < n2) {
+        if (G_FAIL_FLAG) return;
         arr[k] = R[j];
         j++;
         k++;
@@ -178,14 +200,24 @@ void heapify(int* arr, int n, int i){
     int l = 2 * i +1;
     int r = 2 * i + 2;
 
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
+            G_FAIL_FLAG = true; return; 
+        };
+
     if (l < n && arr[l] > arr[largest])
         largest = l;
 
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
+            G_FAIL_FLAG = true; return; 
+        };
     if (r < n && arr[r] > arr[largest])
         largest = r;
-
+    if  (ITERATION_COUNTER > MAX_ITERATE_COUNT) {
+            G_FAIL_FLAG = true; return; 
+        };
     if (largest != i){
         std::swap(arr[i], arr[largest]);
+        ITERATION_COUNTER++;
         heapify(arr, n, largest);
     }   
 }
@@ -193,11 +225,22 @@ void heapify(int* arr, int n, int i){
 
 
 void shell_sort_impl(int* arr, int size) {
+
+    if (G_FAIL_FLAG) return;
+
     for (int gap = size/2;gap > 0;gap /=2){
         for (int i = gap;i < size;i++){
             int temp = arr[i];
             int j = i;
             while (j >=gap && arr[j - gap] > temp){
+                ITERATION_COUNTER++;
+                if (ITERATION_COUNTER > MAX_ITERATE_COUNT) { 
+                    G_FAIL_FLAG = true; 
+                    return; 
+                }
+                
+     
+                ITERATION_COUNTER++;
                 arr[j] = arr[j - gap];
                 j-=gap;
             }
@@ -219,32 +262,55 @@ extern "C" {
     
 
     void c_insertion_sort(int* arr, int n) {
-        for(int i = 1;i< n;++i){
-            int key = arr[i];
-            int j = i -1;
-            while(j >= 0 && arr[j] > key){
-                arr[j+1] = arr[j];
-                j = j - 1;
+
+    if (G_FAIL_FLAG) return; 
+
+    for(int i = 1; i < n; ++i) {
+        int key = arr[i];
+        int j = i - 1;
+        
+        while(j >= 0 && arr[j] > key){
+            
+     
+            ITERATION_COUNTER++; 
+            
+
+            if (ITERATION_COUNTER  > MAX_ITERATE_COUNT) { 
+                G_FAIL_FLAG = true; 
+                return; 
             }
-            arr[j + 1] = key;
+            
+          
+            ITERATION_COUNTER++; 
+            
+
+            arr[j + 1] = arr[j];
+            j = j - 1;
         }
-        printf("--- 2. Insertion Sort executed successfully ---\n");
+        
+
+        arr[j + 1] = key;
+    }
+    printf("--- 2. Insertion Sort executed successfully ---\n");
     }
 
-
     void c_heapsort(int* arr, int n) {
-        for (int i = n / 2-1;i>= 0;i--)
-            heapify(arr,n,i);
+        if (G_FAIL_FLAG) return;
+        
+        for (int i = n / 2-1;i>= 0;i--){
 
+            heapify(arr,n,i);
+        }
         for (int i = n -1; i> 0;i--){
-            std::swap(arr[0], arr[i]);
+
+            std::swap(arr[0], arr[i]);      
             heapify(arr, i, 0);
         }
         printf("--- 3. Heapsort executed successfully ---\n");
     }
 
 
-    void c_three_way_quicksort(int* arr, int size) {
+    void c_three_way_quick_sort(int* arr, int size) {
         three_way_quicksort_recursive(arr, 0, size - 1);
         printf("--- 4. Three-Way Quicksort executed successfully ---\n");
     }
