@@ -1,0 +1,61 @@
+algorithm_name,data_pattern,size_category,N,avg_time_ms,num_runs,comparisons,swaps
+Python Timsort,random,small,20,0.0010829826351255178,5,0,0
+Python Timsort,random,medium,100000,19.13420800701715,5,0,0
+Python Timsort,random,large,1000000,236.02695899899118,5,0,0
+Python Timsort,sorted,small,20,0.0004169996827840805,5,0,0
+Python Timsort,sorted,medium,100000,2.284665999468416,5,0,0
+Python Timsort,sorted,large,1000000,25.721584010170773,5,0,0
+Python Timsort,reverse,small,20,0.0007920025382190943,5,0,0
+Python Timsort,reverse,medium,100000,6.113374984124675,5,0,0
+Python Timsort,reverse,large,1000000,75.22316699032672,5,0,0
+Python Timsort,near,small,20,0.00045797787606716156,5,0,0
+Python Timsort,near,medium,100000,4.534750012680888,5,0,0
+Python Timsort,near,large,1000000,50.9610419976525,5,0,0
+Python Timsort,no,small,20,0.00100000761449337,5,0,0
+Python Timsort,no,medium,100000,19.251541991252452,5,0,0
+Python Timsort,no,large,1000000,234.81141700176522,5,0,0
+Python Timsort,high,small,20,0.0009580107871443033,5,0,0
+Python Timsort,high,medium,100000,15.817665989743546,5,0,0
+Python Timsort,high,large,1000000,172.2202919772826,5,0,0
+NumPy Sort,random,small,20,0.0010420044418424368,5,0,0
+NumPy Sort,random,medium,100000,7.006916013779119,5,0,0
+NumPy Sort,random,large,1000000,85.51658398937434,5,0,0
+NumPy Sort,sorted,small,20,0.0011669762898236513,5,0,0
+NumPy Sort,sorted,medium,100000,0.9410420025233179,5,0,0
+NumPy Sort,sorted,large,1000000,11.168500001076609,5,0,0
+NumPy Sort,reverse,small,20,0.0011250085663050413,5,0,0
+NumPy Sort,reverse,medium,100000,1.6304579912684858,5,0,0
+NumPy Sort,reverse,large,1000000,19.40824999473989,5,0,0
+NumPy Sort,near,small,20,0.0009169743862003088,5,0,0
+NumPy Sort,near,medium,100000,1.1890830064658076,5,0,0
+NumPy Sort,near,large,1000000,14.715833007358015,5,0,0
+NumPy Sort,no,small,20,0.0010840012691915035,5,0,0
+NumPy Sort,no,medium,100000,7.0204999938141555,5,0,0
+NumPy Sort,no,large,1000000,84.34579102322459,5,0,0
+NumPy Sort,high,small,20,0.0010830117389559746,5,0,0
+NumPy Sort,high,medium,100000,5.2349579927977175,5,0,0
+NumPy Sort,high,large,1000000,52.35712500871159,5,0,0
+C++ Quick Sort,random,small,20,0.0046660134103149176,5,0,0
+C++ Insertion Sort,random,small,20,0.004542001988738775,5,0,0
+C++ heap Sort,random,small,20,0.004458008334040642,5,0,0
+C++ three way quicksort Sort,random,small,20,0.0039590231608599424,5,0,0
+C++ three way shell Sort,random,small,20,0.004167028237134218,5,0,0
+C++ three way merge Sort,random,small,20,0.012375006917864084,5,0,0
+C++ Quick Sort,random,medium,100000,17.299708008067682,5,0,0
+C++ Insertion Sort,random,medium,100000,0.0032919924706220627,5,0,0
+C++ heap Sort,random,medium,100000,0.0030410010367631912,5,0,0
+C++ three way quicksort Sort,random,medium,100000,0.004458008334040642,5,0,0
+C++ three way shell Sort,random,medium,100000,0.004457979230210185,5,0,0
+C++ three way merge Sort,random,medium,100000,0.004416011506691575,5,0,0
+C++ Quick Sort,random,large,1000000,197.36941598239355,5,0,0
+C++ Insertion Sort,random,large,1000000,99999.0,5,0,0
+C++ heap Sort,random,large,1000000,0.003374996595084667,5,0,0
+C++ three way quicksort Sort,random,large,1000000,0.007374997949227691,5,0,0
+C++ three way shell Sort,random,large,1000000,99999.0,5,0,0
+C++ three way merge Sort,random,large,1000000,0.007707974873483181,5,0,0
+C++ Quick Sort,sorted,small,20,0.00508397351950407,5,0,0
+C++ Insertion Sort,sorted,small,20,0.002207991201430559,5,0,0
+C++ heap Sort,sorted,small,20,0.0022919848561286926,5,0,0
+C++ three way quicksort Sort,sorted,small,20,0.003249995643272996,5,0,0
+C++ three way shell Sort,sorted,small,20,0.003208988346159458,5,0,0
+C++ three way merge Sort,sorted,small,20,0.0037080026231706142,5,0,0
