@@ -6,6 +6,7 @@ import ctypes
 
 dataset = DataGeneration()
 clibrary = None
+Time_Threshold = 1000
 try:
         # Attempt 1: Load the library directly by name (fastest, relies on OS path)
         clibrary = ctypes.CDLL('custom_sort.so')
@@ -225,12 +226,17 @@ def Benchmark_Cpp_Sort():
             if (algs =="C++ Insertion Sort" or algs =="C++ three way shell Sort")   and target['N'] > 100000:
                 alg_time = 99999.0 
             else:          
-                base_data = target["data"]
+    
                 alg_time = run_iteration_metrics(
-                data_arr=base_data,
+                data_arr=target["data"],
                 sort_func=algo_typ,
                 num_runs=Num_RUNS,          
                 )
+            if alg_time >= Time_Threshold:
+                final_time = 99999.0
+            else:
+                    final_time = alg_time
+                    
             print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
