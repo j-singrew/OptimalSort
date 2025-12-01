@@ -3,6 +3,7 @@ import numpy  as np
 import timeit
 import os
 import ctypes
+import csv
 
 dataset = DataGeneration()
 clibrary = None
@@ -71,6 +72,12 @@ except OSError:
                 print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
                 clibrary = None
 
+def permanente_storage(run_data):
+    with open('ds.csv','w',newline='') as csvfiles:
+        writer = csv.DictWriter(csvfiles)
+        writer.writeheader()
+        writer.writerow(run_data)
+              
 
 def run_c_quicksort_wrapper(arr:np.ndarray):
 
