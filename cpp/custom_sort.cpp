@@ -3,7 +3,7 @@
 #include <vector>
 #include <cstring> 
 
-int max_iterate_count = 10000000;
+int MAX_ITERATE_COUNT = 10000000;
 volatile bool G_FAIL_FLAG = false;
 volatile long long ITERATION_COUNTER  = 0;
 
@@ -24,9 +24,8 @@ int Lomuto_partition(int* arr, int low, int high) {
 
     int pivot = arr[high]; 
     int i = low - 1; 
-    if (ITERATION_COUNTER > max_iterate_count){
+    if (ITERATION_COUNTER > MAX_ITERATE_COUNT){
         G_FAIL_FLAG = true;
-        return;
     }
     for (int j = low; j <= high - 1; j++) {
        ITERATION_COUNTER ++;
@@ -58,7 +57,7 @@ void custom_quicksort_recursive(int* arr,int low ,int high) {
 
 void three_way_partition(int* arr, int low, int high, int& i, int& j) {
     ITERATION_COUNTER ++;
-    if  (ITERATION_COUNTER  > max_iterate_count) {
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
          G_FAIL_FLAG = true; return; 
         }
     
@@ -81,7 +80,7 @@ void three_way_partition(int* arr, int low, int high, int& i, int& j) {
 
     while (mid <= gt) {
         ITERATION_COUNTER ++;
-        if  (ITERATION_COUNTER  > max_iterate_count) {
+        if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
             G_FAIL_FLAG = true; return; 
         };
 
@@ -129,7 +128,7 @@ void mergeSort_recursive(int* arr, int left, int right){
     if (left >= right)
         return;
 
-    if  (ITERATION_COUNTER  > max_iterate_count) {
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
             G_FAIL_FLAG = true; return; 
     };
 
@@ -163,7 +162,7 @@ void  merge_recursive(int* arr,int left,int mid,int right){
 
     while (i < n1 && j < n2){
         ITERATION_COUNTER ++;
-        if  (ITERATION_COUNTER  > max_iterate_count) {
+        if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
             G_FAIL_FLAG = true; return; 
         };
 
@@ -201,19 +200,19 @@ void heapify(int* arr, int n, int i){
     int l = 2 * i +1;
     int r = 2 * i + 2;
 
-    if  (ITERATION_COUNTER  > max_iterate_count) {
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
             G_FAIL_FLAG = true; return; 
         };
 
     if (l < n && arr[l] > arr[largest])
         largest = l;
 
-    if  (ITERATION_COUNTER  > max_iterate_count) {
+    if  (ITERATION_COUNTER  > MAX_ITERATE_COUNT) {
             G_FAIL_FLAG = true; return; 
         };
     if (r < n && arr[r] > arr[largest])
         largest = r;
-    if  (ITERATION_COUNTER > max_iterate_count) {
+    if  (ITERATION_COUNTER > MAX_ITERATE_COUNT) {
             G_FAIL_FLAG = true; return; 
         };
     if (largest != i){
@@ -235,7 +234,7 @@ void shell_sort_impl(int* arr, int size) {
             int j = i;
             while (j >=gap && arr[j - gap] > temp){
                 ITERATION_COUNTER++;
-                if (ITERATION_COUNTER > max_iterate_count) { 
+                if (ITERATION_COUNTER > MAX_ITERATE_COUNT) { 
                     G_FAIL_FLAG = true; 
                     return; 
                 }
@@ -263,31 +262,37 @@ extern "C" {
     
 
     void c_insertion_sort(int* arr, int n) {
-        if (G_FAIL_FLAG) return;
-        for(int i = 1;i< n;++i){
-            int key = arr[i];
-            int j = i -1;
-            while(j >= 0 && arr[j] > key){
 
-                ITERATION_COUNTER++;
-                if (ITERATION_COUNTER  > max_iterate_count) { 
-                    G_FAIL_FLAG = true; 
-                    return; 
-                }
-                if (arr[j] > key) {
+    if (G_FAIL_FLAG) return; 
 
-                G_OPERATION_COUNT++; 
-                
-                    arr[j + 1] = arr[j];
-                    j = j - 1;
-                } else {
-                    break; 
+    for(int i = 1; i < n; ++i) {
+        int key = arr[i];
+        int j = i - 1;
+        
+        while(j >= 0 && arr[j] > key){
+            
+     
+            ITERATION_COUNTER++; 
+            
+
+            if (ITERATION_COUNTER  > MAX_ITERATE_COUNT) { 
+                G_FAIL_FLAG = true; 
+                return; 
             }
-        }
-        }
-        printf("--- 2. Insertion Sort executed successfully ---\n");
-    }
+            
+          
+            ITERATION_COUNTER++; 
+            
 
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        
+
+        arr[j + 1] = key;
+    }
+    printf("--- 2. Insertion Sort executed successfully ---\n");
+    }
 
     void c_heapsort(int* arr, int n) {
         if (G_FAIL_FLAG) return;
@@ -305,7 +310,7 @@ extern "C" {
     }
 
 
-    void c_three_way_quicksort(int* arr, int size) {
+    void c_three_way_quick_sort(int* arr, int size) {
         three_way_quicksort_recursive(arr, 0, size - 1);
         printf("--- 4. Three-Way Quicksort executed successfully ---\n");
     }
