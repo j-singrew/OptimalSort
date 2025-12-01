@@ -146,15 +146,27 @@ void  merge_recursive(int* arr,int left,int mid,int right){
     int n2 = right - mid;
 
     std::vector<int> L(n1), R(n2);
+    if (G_FAIL_FLAG) return;
+
     for (int i = 0;i < n1;i++)
+
         L[i] = arr[left + i];
+
+
     for (int j= 0;j<n2;j++)
+
         R[j] = arr[mid + 1 + j];
 
     int i = 0, j = 0;
     int k = left;
 
+
     while (i < n1 && j < n2){
+        itereration_couter++;
+        if  (itereration_couter > max_iterate_count) {
+            G_FAIL_FLAG = true; return; 
+        };
+
         if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;
@@ -165,14 +177,16 @@ void  merge_recursive(int* arr,int left,int mid,int right){
         }
         k++;
     }
-    
     while (i < n1) {
+        if (G_FAIL_FLAG) return;
         arr[k] = L[i];
         i++;
         k++;
+
     }
 
     while (j < n2) {
+        if (G_FAIL_FLAG) return;
         arr[k] = R[j];
         j++;
         k++;
@@ -187,14 +201,24 @@ void heapify(int* arr, int n, int i){
     int l = 2 * i +1;
     int r = 2 * i + 2;
 
+    if  (itereration_couter > max_iterate_count) {
+            G_FAIL_FLAG = true; return; 
+        };
+
     if (l < n && arr[l] > arr[largest])
         largest = l;
 
+    if  (itereration_couter > max_iterate_count) {
+            G_FAIL_FLAG = true; return; 
+        };
     if (r < n && arr[r] > arr[largest])
         largest = r;
-
+    if  (itereration_couter > max_iterate_count) {
+            G_FAIL_FLAG = true; return; 
+        };
     if (largest != i){
         std::swap(arr[i], arr[largest]);
+        itereration_couter++;
         heapify(arr, n, largest);
     }   
 }
