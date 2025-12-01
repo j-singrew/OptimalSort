@@ -76,18 +76,26 @@ except OSError:
                 print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
                 clibrary = None
 
-def permanente_storage(run_data):
+def permanente_storage(run_data: List[Dict[str, Any]]):
 
     if not run_data:
         print("Error: No data records found to save.")
         return
+    
+    fieldnames = list(run_data[0].keys())
+
+
+
+
+        
+   
 
     try:
 
-        with open('ds.csv','w',newline='',encoding='utf-8') as csvfiles:
-            writer = csv.DictWriter(csvfiles)
+        with open('ds.csv','w',newline='',encoding='utf-8') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
-            writer.writerow(run_data)
+            writer.writerows(run_data)
 
     except Exception as e:
         print(f"\n[ERROR] Failed to save benchmark data to CSV: {e}")
@@ -218,7 +226,7 @@ def Benchmarking_Orchestration():
                 "swaps": 0      
             }
             final_results.append(final_record)
-            
+            permanente_storage(final_results)
             print(f"  {target['name']:<30} | Time: {alg_time:.4f} ms")
 
             final_record["avg_time_ms"] = alg_time
@@ -268,7 +276,7 @@ def Benchmark_Cpp_Sort():
                 "swaps": 0      
             }
             final_results.append(final_record)
-            print(f"final record is ",final_record)
+            permanente_storage(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 
