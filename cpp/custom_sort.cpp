@@ -5,7 +5,7 @@
 
 int max_iterate_count = 10000000;
 volatile bool G_FAIL_FLAG = false;
-volatile long long itereration_couter = 0;
+volatile long long ITERATION_COUNTER  = 0;
 
 void custom_quicksort_recursive(int* arr, int low, int high);
 int Lomuto_partition(int* arr, int low, int high);
@@ -24,19 +24,19 @@ int Lomuto_partition(int* arr, int low, int high) {
 
     int pivot = arr[high]; 
     int i = low - 1; 
-    if (itereration_couter > max_iterate_count){
+    if (ITERATION_COUNTER > max_iterate_count){
         G_FAIL_FLAG = true;
         return;
     }
     for (int j = low; j <= high - 1; j++) {
-        itereration_couter++;
+       ITERATION_COUNTER ++;
         if (arr[j] <= pivot) {
             i++; 
             std::swap(arr[i], arr[j]);
-            itereration_couter++;
+            ITERATION_COUNTER ++;
         }
     }
-    itereration_couter++;
+    ITERATION_COUNTER ++;
     std::swap(arr[i + 1], arr[high]);
     
     return (i + 1);
@@ -57,16 +57,16 @@ void custom_quicksort_recursive(int* arr,int low ,int high) {
 
 
 void three_way_partition(int* arr, int low, int high, int& i, int& j) {
-    itereration_couter++;
-    if  (itereration_couter > max_iterate_count) {
+    ITERATION_COUNTER ++;
+    if  (ITERATION_COUNTER  > max_iterate_count) {
          G_FAIL_FLAG = true; return; 
         }
     
     if (high - low <= 1) {
 
         if (arr[high] < arr[low])
-            itereration_couter++;
-            itereration_couter++;
+            ITERATION_COUNTER++;
+            ITERATION_COUNTER ++;
             std::swap(arr[high], arr[low]);
         }else{
             i = low;
@@ -80,24 +80,24 @@ void three_way_partition(int* arr, int low, int high, int& i, int& j) {
     int pivot = arr[low]; 
 
     while (mid <= gt) {
-        itereration_couter++;
-        if  (itereration_couter > max_iterate_count) {
+        ITERATION_COUNTER ++;
+        if  (ITERATION_COUNTER  > max_iterate_count) {
             G_FAIL_FLAG = true; return; 
         };
 
         if (arr[mid] < pivot) {
-            itereration_couter++;
+            ITERATION_COUNTER++;
             std::swap(arr[lt], arr[mid]);
             lt++;
             mid++;
         
         }
         else if (arr[mid] > pivot) {
-            itereration_couter+=2;
+            ITERATION_COUNTER +=2;
             std::swap(arr[mid], arr[gt]);
             gt--;
         } else {
-            itereration_couter++;
+            ITERATION_COUNTER ++;
             mid++;
         }
     }
@@ -125,11 +125,11 @@ void three_way_quicksort_recursive(int* arr, int low, int high) {
 
 
 void mergeSort_recursive(int* arr, int left, int right){
-    itereration_couter++;
+    ITERATION_COUNTER ++;
     if (left >= right)
         return;
 
-    if  (itereration_couter > max_iterate_count) {
+    if  (ITERATION_COUNTER  > max_iterate_count) {
             G_FAIL_FLAG = true; return; 
     };
 
@@ -162,8 +162,8 @@ void  merge_recursive(int* arr,int left,int mid,int right){
 
 
     while (i < n1 && j < n2){
-        itereration_couter++;
-        if  (itereration_couter > max_iterate_count) {
+        ITERATION_COUNTER ++;
+        if  (ITERATION_COUNTER  > max_iterate_count) {
             G_FAIL_FLAG = true; return; 
         };
 
@@ -201,24 +201,24 @@ void heapify(int* arr, int n, int i){
     int l = 2 * i +1;
     int r = 2 * i + 2;
 
-    if  (itereration_couter > max_iterate_count) {
+    if  (ITERATION_COUNTER  > max_iterate_count) {
             G_FAIL_FLAG = true; return; 
         };
 
     if (l < n && arr[l] > arr[largest])
         largest = l;
 
-    if  (itereration_couter > max_iterate_count) {
+    if  (ITERATION_COUNTER  > max_iterate_count) {
             G_FAIL_FLAG = true; return; 
         };
     if (r < n && arr[r] > arr[largest])
         largest = r;
-    if  (itereration_couter > max_iterate_count) {
+    if  (ITERATION_COUNTER > max_iterate_count) {
             G_FAIL_FLAG = true; return; 
         };
     if (largest != i){
         std::swap(arr[i], arr[largest]);
-        itereration_couter++;
+        ITERATION_COUNTER++;
         heapify(arr, n, largest);
     }   
 }
@@ -234,14 +234,14 @@ void shell_sort_impl(int* arr, int size) {
             int temp = arr[i];
             int j = i;
             while (j >=gap && arr[j - gap] > temp){
-                itereration_couter++;
-                if (itereration_couter > max_iterate_count) { 
+                ITERATION_COUNTER++;
+                if (ITERATION_COUNTER > max_iterate_count) { 
                     G_FAIL_FLAG = true; 
                     return; 
                 }
                 
      
-                itereration_couter++;
+                ITERATION_COUNTER++;
                 arr[j] = arr[j - gap];
                 j-=gap;
             }
@@ -269,8 +269,8 @@ extern "C" {
             int j = i -1;
             while(j >= 0 && arr[j] > key){
 
-                itereration_couter++;
-                if (itereration_couter > max_iterate_count) { 
+                ITERATION_COUNTER++;
+                if (ITERATION_COUNTER  > max_iterate_count) { 
                     G_FAIL_FLAG = true; 
                     return; 
                 }
