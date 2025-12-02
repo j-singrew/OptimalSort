@@ -278,7 +278,7 @@ def Benchmark_Cpp_Sort():
             final_results.append(final_record)
             permanente_storage(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
-
+            print(final_results)
 
 if __name__ == "__main__":
     Benchmarking_Orchestration()

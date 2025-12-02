@@ -8,7 +8,7 @@ volatile bool G_FAIL_FLAG = false;
 volatile long long ITERATION_COUNTER  = 0;
 
 void custom_quicksort_recursive(int* arr, int low, int high);
-int Lomuto_partition(int* arr, int low, int high);
+int DualPivot_partition(int* arr, int low, int high);
 
 void three_way_quicksort_recursive(int* arr, int low, int high);
 void three_way_partition(int* arr, int low, int high, int& i, int& j);
@@ -20,35 +20,71 @@ void heapify(int* arr, int n, int i);
 
 
 
-int Lomuto_partition(int* arr, int low, int high) {
+int DualPivot_partition(int* arr, int low, int high,int* lp) {
 
-    int pivot = arr[high]; 
-    int i = low - 1; 
+
     if (ITERATION_COUNTER > MAX_ITERATE_COUNT){
         G_FAIL_FLAG = true;
     }
-    for (int j = low; j <= high - 1; j++) {
-       ITERATION_COUNTER ++;
-        if (arr[j] <= pivot) {
-            i++; 
-            std::swap(arr[i], arr[j]);
-            ITERATION_COUNTER ++;
-        }
-    }
     ITERATION_COUNTER ++;
-    std::swap(arr[i + 1], arr[high]);
-    
-    return (i + 1);
+    if (arr[low] > arr[high]){
+        ITERATION_COUNTER ++;
+        std::swap(arr[low],arr[high]);
+    }
+
+    int j = low + 1;
+    int g = high -1 ,k = low+1,p = arr[low] ,q = arr[high];
+    while(k <= g){
+        ITERATION_COUNTER ++;
+        if (arr[k]<p){
+            ITERATION_COUNTER ++;
+            std::swap(arr[k],arr[j]);
+            j++;
+        }
+        
+        else if (arr[k >= q]){
+            ITERATION_COUNTER +=2;
+            while(arr[g] > q && k < g){
+                g--;
+            }
+            ITERATION_COUNTER ++;
+            std::swap(arr[k],arr[g]);
+            g--;
+            ITERATION_COUNTER ++;
+            if (arr[k] < p){
+                ITERATION_COUNTER ++;
+                std::swap(arr[k],arr[j]);
+                j++;
+            }
+        }
+        k++;
+    }
+    j--;
+    g++;
+    ITERATION_COUNTER ++;
+    std::swap(arr[low], arr[j]);
+    ITERATION_COUNTER ++;
+    std::swap(arr[high], arr[g]);
+    *lp = j;
+    return g;
+
+
+
+
 }
 
 void custom_quicksort_recursive(int* arr,int low ,int high) {
 
     if (low < high) { 
-        
-        int split_index = Lomuto_partition(arr,low,high);
 
-        custom_quicksort_recursive(arr, low, split_index - 1);
-        custom_quicksort_recursive(arr, split_index + 1, high); 
+        int lp,rp;
+
+        
+        int rp = DualPivot_partition(arr,low,high,&lp);
+
+        custom_quicksort_recursive(arr, low, lp - 1);
+        custom_quicksort_recursive(arr, lp+1, rp - 1);
+        custom_quicksort_recursive(arr, rp+1, high); 
     }
 }
 
