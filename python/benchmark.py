@@ -1,7 +1,7 @@
 from dataset import DataGeneration
 import numpy  as np
 import timeit
-import os
+import os.path
 import ctypes
 import csv
 from typing import List, Dict, Any
@@ -81,20 +81,21 @@ def permanente_storage(run_data: List[Dict[str, Any]]):
     if not run_data:
         print("Error: No data records found to save.")
         return
-    
+    file_name = 'ds.csv'
     fieldnames = list(run_data[0].keys())
 
 
 
 
-        
+    file_exists = os.path.isfile(file_name)
    
 
     try:
 
-        with open('ds.csv','w',newline='',encoding='utf-8') as csvfile:
+        with open(file_name,'a',newline='',encoding='utf-8') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
+            if not file_exists:
+                writer.writeheader()
             writer.writerows(run_data)
 
     except Exception as e:
