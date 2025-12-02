@@ -22,6 +22,8 @@ void merge_recursive(int* arr, int left, int mid, int right);
 
 void heapify(int* arr, int n, int i); 
 
+int return_metrics(int swap,int comparason);
+
 
 
 int Lomuto_partition(int* arr, int low, int high) {
@@ -44,7 +46,6 @@ int Lomuto_partition(int* arr, int low, int high) {
     ITERATION_COUNTER ++;
     SWAP++; 
     std::swap(arr[i + 1], arr[high]);
-    
     return (i + 1);
 }
 
