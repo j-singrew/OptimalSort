@@ -80,7 +80,7 @@ void custom_quicksort_recursive(int* arr,int low ,int high) {
         int lp,rp;
 
         
-        int rp = DualPivot_partition(arr,low,high,&lp);
+        rp = DualPivot_partition(arr,low,high,&lp);
 
         custom_quicksort_recursive(arr, low, lp - 1);
         custom_quicksort_recursive(arr, lp+1, rp - 1);
