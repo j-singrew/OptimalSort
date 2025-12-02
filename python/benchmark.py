@@ -189,6 +189,7 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
         repeat=num_runs,
         number=1,
     )
+    print(f"times are ",times)
     return min(times) * 1000
 
 
