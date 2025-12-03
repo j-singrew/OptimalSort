@@ -1,8 +1,10 @@
 from dataset import DataGeneration
 import numpy  as np
-from time import perf_counter_ns
+
 import os.path
 import ctypes
+import copy
+import time
 import csv
 from typing import List, Dict, Any
 
@@ -55,11 +57,11 @@ except OSError:
                 ]
                 clibrary.c_heapsort.restype = None  
 
-                clibrary.c_three_way_quick_sort.argtypes = [
+                clibrary.c_three_way_quicksort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
                     ctypes.c_int,
                 ]
-                clibrary.c_three_way_quick_sort.restype = None  
+                clibrary.c_three_way_quicksort.restype = None  
 
                 clibrary.c_shell_sort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
@@ -144,7 +146,7 @@ def run_c_three_way_quick_sort(arr:np.ndarray):
 
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_three_way_quick_sort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_three_way_quicksort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_shell_sort(arr:np.ndarray):
     if clibrary is None:
@@ -193,12 +195,13 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
     times_list = []
     swaps_list = []
     comparisons_list = []
-    time =  perf_counter_ns()
+
     for _ in range(num_runs):
 
+        data_copy = copy.deepcopy(data_arr)
         start_time = time.perf_counter()
 
-        sort_func(data_arr)
+        sort_func(data_copy)
 
         end_time = time.perf_counter()
 
@@ -243,16 +246,15 @@ def Benchmarking_Orchestration():
                 "data_pattern": target['name'].split('_')[0],
                 "size_category": target['name'].split('_')[-1],
                 "N": target['N'],
-                "avg_time_ms":  alg_time,
+                "avg_time_ms":  alg_time['time'],
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0      
             }
             final_results.append(final_record)
             permanente_storage(final_results)
-            print(f"  {target['name']:<30} | Time: {alg_time:.4f} ms")
+            print(f"  {target['name']:<30} | Time: {alg_time['time']:.4f} ms")
 
-            final_record["avg_time_ms"] = alg_time
     return final_results
 
 def Benchmark_Cpp_Sort():
@@ -281,10 +283,11 @@ def Benchmark_Cpp_Sort():
                 sort_func=algo_typ,
                 num_runs=NUM_RUNS,          
                 )
-            if alg_time >= Time_Threshold:
-                final_time = 99999.0
-            else:
-                final_time = alg_time
+
+            #if alg_metrics['alg_time'] >= Time_Threshold:
+                #final_time = 99999.0
+            #else:
+                #final_time = alg_metrics['alg_time']
 
 
 
@@ -294,14 +297,14 @@ def Benchmark_Cpp_Sort():
                 "data_pattern": target['name'].split('_')[0],
                 "size_category": target['name'].split('_')[-1],
                 "N": target['N'],
-                "avg_time_ms":  alg_time,
+                "avg_time_ms":  alg_metrics['time'],
                 "num_runs": NUM_RUNS,
-                "comparisons": COMPARASON, 
-                "swaps": SWAP  
+                "comparisons":  alg_metrics['comps'], 
+                "swaps":  alg_metrics['swaps']
             }
             final_results.append(final_record)
             print(final_results)
-            print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
+            print(f"  {target['name']:<30} | C++ Time: {alg_metrics['time']:.4f} ms")
 
 if __name__ == "__main__":
     Benchmarking_Orchestration()
