@@ -1,0 +1,3 @@
+extern "c" {
+    static
+}

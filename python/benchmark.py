@@ -72,9 +72,14 @@ except OSError:
                 ]
                 clibrary.c_merge_sort.restype = None  
 
+                SWAP = ctypes.c_longlong.in_dll(ctypes.pythonapi,"SWAP")
+                COMPARASON = ctypes.c_longlong.in_dll(ctypes.pythonapi,"COMPARASON")
+
+
             except Exception as e:
                 print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
                 clibrary = None
+
 
 def permanente_storage(run_data: List[Dict[str, Any]]):
 
