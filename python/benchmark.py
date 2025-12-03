@@ -72,7 +72,7 @@ except OSError:
                 ]
                 clibrary.c_merge_sort.restype = None  
 
-                SWAP = ctypes.c_longlong.in_dll(ctypes.pythonapi,"SWAP")
+                SWAP = ctypes.c_longlong.in_dll("SWAP")
                 COMPARASON = ctypes.c_longlong.in_dll(ctypes.pythonapi,"COMPARASON")
 
 
