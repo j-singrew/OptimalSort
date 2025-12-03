@@ -12,6 +12,7 @@ final_results = []
 Time_Threshold = 1000
 NUM_RUNS = 5
 
+
 try:
  
         clibrary = ctypes.CDLL('custom_sort.so')
@@ -199,7 +200,6 @@ def  run_iteration_metrics(data_arr,sort_func,num_runs):
         repeat=num_runs,
         number=1,
     )
-    print(f"times are ",times)
     return min(times) * 1000
 
 
@@ -277,7 +277,8 @@ def Benchmark_Cpp_Sort():
 
             SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
             COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
-
+            print(f"compariton",COMPARASON)
+            print(f"swap", SWAP )
 
             final_record = {
                 "algorithm_name":  algs,
@@ -286,11 +287,11 @@ def Benchmark_Cpp_Sort():
                 "N": target['N'],
                 "avg_time_ms":  alg_time,
                 "num_runs": NUM_RUNS,
-                "comparisons": 0, 
-                "swaps": 0      
+                "comparisons": COMPARASON, 
+                "swaps": SWAP  
             }
             final_results.append(final_record)
-            permanente_storage(final_results)
+            print(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
 
 if __name__ == "__main__":
