@@ -117,6 +117,7 @@ def run_c_quicksort_wrapper(arr:np.ndarray):
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
     clibrary.custom_quicksort_c(c_arr_pointer, arr_c_compatible.size)
+
     
 def run_c_insertion_sort(arr:np.ndarray):
 
@@ -274,6 +275,8 @@ def Benchmark_Cpp_Sort():
             else:
                 final_time = alg_time
 
+            SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
+            COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
 
 
             final_record = {
