@@ -1,8 +1,10 @@
 from dataset import DataGeneration
 import numpy  as np
-import timeit
+
 import os.path
 import ctypes
+import copy
+import time
 import csv
 from typing import List, Dict, Any
 
@@ -55,11 +57,11 @@ except OSError:
                 ]
                 clibrary.c_heapsort.restype = None  
 
-                clibrary.c_three_way_quick_sort.argtypes = [
+                clibrary.c_three_way_quicksort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
                     ctypes.c_int,
                 ]
-                clibrary.c_three_way_quick_sort.restype = None  
+                clibrary.c_three_way_quicksort.restype = None  
 
                 clibrary.c_shell_sort.argtypes = [
                     ctypes.POINTER(ctypes.c_int), 
@@ -144,7 +146,7 @@ def run_c_three_way_quick_sort(arr:np.ndarray):
 
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_three_way_quick_sort(c_arr_pointer, arr_c_compatible.size)
+    clibrary.c_three_way_quicksort(c_arr_pointer, arr_c_compatible.size)
 
 def run_c_shell_sort(arr:np.ndarray):
     if clibrary is None:
@@ -190,19 +192,31 @@ def prepare_benchmark_targets():
 
 def  run_iteration_metrics(data_arr,sort_func,num_runs):
 
-    timeit_setup_code = "import numpy as np; data = base_data.copy()" 
-    stmt = "sort_func(data)"
+    times_list = []
+    swaps_list = []
+    comparisons_list = []
 
-    times =timeit.repeat(
-        stmt,
-        setup=timeit_setup_code,
-        globals={"sort_func": sort_func, "base_data": data_arr},
-        repeat=num_runs,
-        number=1,
-    )
-    return min(times) * 1000
+    for _ in range(num_runs):
 
+        data_copy = copy.deepcopy(data_arr)
+        start_time = time.perf_counter()
 
+        sort_func(data_copy)
+
+        end_time = time.perf_counter()
+
+        SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
+        COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
+
+        times_list.append(end_time - start_time)
+        swaps_list.append(SWAP)
+        comparisons_list.append(COMPARASON)  
+
+    avg_time = min(times_list)
+    avg_swaps = sum(swaps_list) / num_runs
+    avg_comparisons = sum(comparisons_list) / num_runs
+
+    return { 'time': avg_time, 'swaps': avg_swaps, 'comps': avg_comparisons }
 
 
 
@@ -232,16 +246,15 @@ def Benchmarking_Orchestration():
                 "data_pattern": target['name'].split('_')[0],
                 "size_category": target['name'].split('_')[-1],
                 "N": target['N'],
-                "avg_time_ms":  alg_time,
+                "avg_time_ms":  alg_time['time'],
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0      
             }
             final_results.append(final_record)
             permanente_storage(final_results)
-            print(f"  {target['name']:<30} | Time: {alg_time:.4f} ms")
+            print(f"  {target['name']:<30} | Time: {alg_time['time']:.4f} ms")
 
-            final_record["avg_time_ms"] = alg_time
     return final_results
 
 def Benchmark_Cpp_Sort():
@@ -265,34 +278,33 @@ def Benchmark_Cpp_Sort():
                 alg_time = 99999.0 
             else:          
     
-                alg_time = run_iteration_metrics(
+                alg_metrics = run_iteration_metrics(
                 data_arr=target["data"],
                 sort_func=algo_typ,
                 num_runs=NUM_RUNS,          
                 )
-            if alg_time >= Time_Threshold:
-                final_time = 99999.0
-            else:
-                final_time = alg_time
 
-            SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
-            COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
-            print(f"compariton",COMPARASON)
-            print(f"swap", SWAP )
+            #if alg_metrics['alg_time'] >= Time_Threshold:
+                #final_time = 99999.0
+            #else:
+                #final_time = alg_metrics['alg_time']
+
+
+
 
             final_record = {
                 "algorithm_name":  algs,
                 "data_pattern": target['name'].split('_')[0],
                 "size_category": target['name'].split('_')[-1],
                 "N": target['N'],
-                "avg_time_ms":  alg_time,
+                "avg_time_ms":  alg_metrics['time'],
                 "num_runs": NUM_RUNS,
-                "comparisons": COMPARASON, 
-                "swaps": SWAP  
+                "comparisons":  alg_metrics['comps'], 
+                "swaps":  alg_metrics['swaps']
             }
             final_results.append(final_record)
-            print(final_results)
-            print(f"  {target['name']:<30} | C++ Time: {alg_time:.4f} ms")
+            permanente_storage(final_results)
+            print(f"  {target['name']:<30} | C++ Time: {alg_metrics['time']:.4f} ms")
 
 if __name__ == "__main__":
     Benchmarking_Orchestration()
