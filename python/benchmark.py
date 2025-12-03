@@ -1,6 +1,6 @@
 from dataset import DataGeneration
 import numpy  as np
-import timeit
+from time import perf_counter_ns
 import os.path
 import ctypes
 import csv
@@ -190,19 +190,30 @@ def prepare_benchmark_targets():
 
 def  run_iteration_metrics(data_arr,sort_func,num_runs):
 
-    timeit_setup_code = "import numpy as np; data = base_data.copy()" 
-    stmt = "sort_func(data)"
+    times_list = []
+    swaps_list = []
+    comparisons_list = []
+    time =  perf_counter_ns()
+    for _ in range(num_runs):
 
-    times =timeit.repeat(
-        stmt,
-        setup=timeit_setup_code,
-        globals={"sort_func": sort_func, "base_data": data_arr},
-        repeat=num_runs,
-        number=1,
-    )
-    return min(times) * 1000
+        start_time = time.perf_counter()
 
+        sort_func(data_arr)
 
+        end_time = time.perf_counter()
+
+        SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
+        COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
+
+        times_list.append(end_time - start_time)
+        swaps_list.append(SWAP)
+        comparisons_list.append(COMPARASON)  
+
+    avg_time = min(times_list)
+    avg_swaps = sum(swaps_list) / num_runs
+    avg_comparisons = sum(comparisons_list) / num_runs
+
+    return { 'time': avg_time, 'swaps': avg_swaps, 'comps': avg_comparisons }
 
 
 
@@ -265,7 +276,7 @@ def Benchmark_Cpp_Sort():
                 alg_time = 99999.0 
             else:          
     
-                alg_time = run_iteration_metrics(
+                alg_metrics = run_iteration_metrics(
                 data_arr=target["data"],
                 sort_func=algo_typ,
                 num_runs=NUM_RUNS,          
@@ -275,10 +286,8 @@ def Benchmark_Cpp_Sort():
             else:
                 final_time = alg_time
 
-            SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
-            COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
-            print(f"compariton",COMPARASON)
-            print(f"swap", SWAP )
+
+
 
             final_record = {
                 "algorithm_name":  algs,
