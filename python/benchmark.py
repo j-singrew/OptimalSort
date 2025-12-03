@@ -303,7 +303,7 @@ def Benchmark_Cpp_Sort():
                 "swaps":  alg_metrics['swaps']
             }
             final_results.append(final_record)
-            print(final_results)
+            permanente_storage(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_metrics['time']:.4f} ms")
 
 if __name__ == "__main__":
