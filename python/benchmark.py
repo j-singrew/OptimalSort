@@ -1,5 +1,5 @@
 from dataset import DataGeneration
-
+from analytics.run_metric import run_variation_counter
 import numpy  as np
 
 import os.path
@@ -10,6 +10,7 @@ import csv
 from typing import List, Dict, Any
 
 dataset = DataGeneration()
+run_metrics = run_variation_counter(dataset)
 clibrary = None
 final_results = []
 Time_Threshold = 1000
@@ -259,6 +260,7 @@ def Benchmarking_Orchestration():
     return final_results
 
 def Benchmark_Cpp_Sort():
+    print("This is run metrics ",run_metrics)
     cpp_algorithms_to_run = [
     ("C++ Quick Sort", run_c_quicksort_wrapper),
     ("C++ Insertion Sort", run_c_insertion_sort),
