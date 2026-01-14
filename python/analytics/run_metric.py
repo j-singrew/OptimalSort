@@ -19,8 +19,8 @@ def run_variation_counter(dataset:dict) ->dict:
             elif data_length < 2:
                     
                     runs = 1
-                    normalised_run_metric = runs/data_length
-                    runs_per_size.append((runs, normalised_run_metric))
+     
+                    runs_per_size.append((1, 1.0))
                     continue
             else:
                 runs = 1
