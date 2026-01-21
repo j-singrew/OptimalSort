@@ -8,7 +8,8 @@ def run_variation_counter(dataset:dict) ->dict:
 
     for key,dataset_tuple in dataset.items():
         runs_per_size = []
-        print("this is key",key)
+        value_key = key.split('_')[0] +"_"+key.split('_')[1]
+        print("this is new key",value_key)
 
         for array_size in dataset_tuple:
 

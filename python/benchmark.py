@@ -298,6 +298,7 @@ def Benchmark_Cpp_Sort():
             #run_metrics
             #'random_order': ([(15, 0.75, 0.0), (66550, 0.6655, 0.00482), (666318, 0.666318, 0.048225)], 1000000)
             key = (target['name'].split('r_')[0])+"r"
+            print("ok this is other key",key)
 
             final_record = {
                 "algorithm_name":  algs,
