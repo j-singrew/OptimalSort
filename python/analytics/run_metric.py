@@ -5,6 +5,7 @@ def run_variation_counter(dataset:dict) ->dict:
 
     run_data = {}
 
+
     for key,dataset_tuple in dataset.items():
         runs_per_size = []
 
@@ -12,6 +13,10 @@ def run_variation_counter(dataset:dict) ->dict:
         for array_size in dataset_tuple:
 
             data_length = len(array_size)
+            unique = list(set(array_size))
+            unique_length =len(unique)
+            
+            
             if data_length == 0:
                 runs = 0 
                 normalised_run_metric = 0
