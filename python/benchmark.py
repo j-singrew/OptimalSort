@@ -293,8 +293,12 @@ def Benchmark_Cpp_Sort():
                 #final_time = alg_metrics['alg_time']
 
 
+            #runs_per_size.append((runs,normalised_run_metric,duplicate_ratio ))
+            #run_data[key] = (runs_per_size,data_length)
+            #run_metrics
+            #'random_order': ([(15, 0.75, 0.0), (66550, 0.6655, 0.00482), (666318, 0.666318, 0.048225)], 1000000)
+            key = (target['name'].split('r_')[0])+"r"
 
-            print("Iteration metric datastruct",run_metrics)
             final_record = {
                 "algorithm_name":  algs,
                 "data_pattern": target['name'].split('_')[0],
@@ -304,8 +308,8 @@ def Benchmark_Cpp_Sort():
                 "num_runs": NUM_RUNS,
                 "comparisons":  alg_metrics['comps'], 
                 "swaps":  alg_metrics['swaps'],
-
-                
+                "normalised_run":run_metrics[key][1],
+                "duplite_ratio":run_metrics[key][-1]                
             }
             final_results.append(final_record)
             permanente_storage(final_results)
