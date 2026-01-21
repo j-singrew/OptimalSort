@@ -294,7 +294,7 @@ def Benchmark_Cpp_Sort():
 
 
 
-
+            print("Iteration metric datastruct",run_metrics)
             final_record = {
                 "algorithm_name":  algs,
                 "data_pattern": target['name'].split('_')[0],
@@ -303,7 +303,9 @@ def Benchmark_Cpp_Sort():
                 "avg_time_ms":  alg_metrics['time'],
                 "num_runs": NUM_RUNS,
                 "comparisons":  alg_metrics['comps'], 
-                "swaps":  alg_metrics['swaps']
+                "swaps":  alg_metrics['swaps'],
+
+                
             }
             final_results.append(final_record)
             permanente_storage(final_results)
