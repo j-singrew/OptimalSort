@@ -315,12 +315,14 @@ def Benchmark_Cpp_Sort():
 
             if size == "small":
                      normalised_runs =  run_metrics[key][0][0][1]
-               
+                     duplicate_ratio =  run_metrics[key][0][0][2]
             elif size =="medium":
                       normalised_runs = run_metrics[key][0][1][1]
+                      duplicate_ratio =  run_metrics[key][0][1][2]
             else:
                       normalised_runs = run_metrics[key][0][2][1]
-            duplicate_ratio = run_metrics[key][0][0][2]
+                      normalised_runs = run_metrics[key][0][2][2]
+                      
             print("normalised_run",normalised_runs)
             print("duplite_ratio",duplicate_ratio)
 
