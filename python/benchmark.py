@@ -262,7 +262,7 @@ def Benchmarking_Orchestration():
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0,
-                "normalised_run":normalised_runs ,
+                "normalised_run":normalised_runs,
                 "duplite_ratio":duplicate_ratio  
             }
             final_results.append(final_record)
