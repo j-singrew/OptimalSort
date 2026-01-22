@@ -244,14 +244,16 @@ def Benchmarking_Orchestration():
             alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
             key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
             size = target['name'].split('_')[-1]
-            duplicate_ratio = run_metrics[key][0][0][2]
             if size == "small":
                      normalised_runs =  run_metrics[key][0][0][1]
-               
+                     duplicate_ratio =  run_metrics[key][0][0][2]
             elif size =="medium":
                       normalised_runs = run_metrics[key][0][1][1]
+                      duplicate_ratio =  run_metrics[key][0][1][2]
             else:
                       normalised_runs = run_metrics[key][0][2][1]
+                      normalised_runs = run_metrics[key][0][2][2]
+                      
 
             final_record = {
                 "algorithm_name": algo_name,
@@ -322,7 +324,7 @@ def Benchmark_Cpp_Sort():
             else:
                       normalised_runs = run_metrics[key][0][2][1]
                       normalised_runs = run_metrics[key][0][2][2]
-                      
+
             print("normalised_run",normalised_runs)
             print("duplite_ratio",duplicate_ratio)
 
