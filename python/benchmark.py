@@ -242,7 +242,7 @@ def Benchmarking_Orchestration():
             data_to_pass = target['data']
 
             alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
-            key = (target['name'].split('r_')[0])
+            key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
             print("ok this is other key",key)
 
             final_record = {
@@ -254,8 +254,8 @@ def Benchmarking_Orchestration():
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0,
-                #"normalised_run":run_metrics[key][1],
-                #"duplite_ratio":run_metrics[key][-1]  
+                "normalised_run":run_metrics[key][1],
+                "duplite_ratio":run_metrics[key][-1]    
             }
             final_results.append(final_record)
             permanente_storage(final_results)
@@ -301,9 +301,11 @@ def Benchmark_Cpp_Sort():
             #run_data[key] = (runs_per_size,data_length)
             #run_metrics
             #'random_order': ([(15, 0.75, 0.0), (66550, 0.6655, 0.00482), (666318, 0.666318, 0.048225)], 1000000)
-            key = (target['name'].split('r_')[0])+"r"
-            test = print("Test target: ",test_targets)
-            print("ok this is other key",key)
+            key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
+
+            
+            print("normalised_run",run_metrics[key][1])
+            print("duplite_ratio",run_metrics[key][-1])
 
             final_record = {
                 "algorithm_name":  algs,
@@ -314,8 +316,8 @@ def Benchmark_Cpp_Sort():
                 "num_runs": NUM_RUNS,
                 "comparisons":  alg_metrics['comps'], 
                 "swaps":  alg_metrics['swaps'],
-                #"normalised_run":run_metrics[key][1],
-                #"duplite_ratio":run_metrics[key][-1]                
+                "normalised_run":run_metrics[key][1],
+                "duplite_ratio":run_metrics[key][-1]                
             }
             final_results.append(final_record)
             permanente_storage(final_results)
