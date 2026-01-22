@@ -242,6 +242,8 @@ def Benchmarking_Orchestration():
             data_to_pass = target['data']
 
             alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
+            key = (target['name'].split('r_')[0])
+            print("ok this is other key",key)
 
             final_record = {
                 "algorithm_name": algo_name,
@@ -251,7 +253,9 @@ def Benchmarking_Orchestration():
                 "avg_time_ms":  alg_time['time'],
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
-                "swaps": 0      
+                "swaps": 0,
+                "normalised_run":run_metrics[key][1],
+                "duplite_ratio":run_metrics[key][-1]  
             }
             final_results.append(final_record)
             permanente_storage(final_results)
