@@ -301,18 +301,8 @@ def Benchmark_Cpp_Sort():
                 num_runs=NUM_RUNS,          
                 )
 
-            #if alg_metrics['alg_time'] >= Time_Threshold:
-                #final_time = 99999.0
-            #else:
-                #final_time = alg_metrics['alg_time']
-
-
-            #runs_per_size.append((runs,normalised_run_metric,duplicate_ratio ))
-            #run_data[key] = (runs_per_size,data_length)
-            #run_metrics
-            #'random_order': ([(15, 0.75, 0.0), (66550, 0.6655, 0.00482), (666318, 0.666318, 0.048225)], 1000000)
             key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
-            print("run metrics",run_metrics)
+
             size = target['name'].split('_')[-1]
 
             if size == "small":
@@ -325,8 +315,6 @@ def Benchmark_Cpp_Sort():
                       normalised_runs = run_metrics[key][0][2][1]
                       normalised_runs = run_metrics[key][0][2][2]
 
-            print("normalised_run",normalised_runs)
-            print("duplite_ratio",duplicate_ratio)
 
             final_record = {
                 "algorithm_name":  algs,
