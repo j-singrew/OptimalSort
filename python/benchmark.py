@@ -243,7 +243,15 @@ def Benchmarking_Orchestration():
 
             alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
             key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
-            print("ok this is other key",key)
+            size = target['name'].split('_')[-1]
+            duplicate_ratio = run_metrics[key][0][0][2]
+            if size == "small":
+                     normalised_runs =  run_metrics[key][0][0][1]
+               
+            elif size =="medium":
+                      normalised_runs = run_metrics[key][0][1][1]
+            else:
+                      normalised_runs = run_metrics[key][0][2][1]
 
             final_record = {
                 "algorithm_name": algo_name,
@@ -254,8 +262,8 @@ def Benchmarking_Orchestration():
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0,
-                "normalised_run":run_metrics[key][1],
-                "duplite_ratio":run_metrics[key][-1]    
+                "normalised_run":normalised_runs ,
+                "duplite_ratio":duplicate_ratio  
             }
             final_results.append(final_record)
             permanente_storage(final_results)
@@ -302,10 +310,19 @@ def Benchmark_Cpp_Sort():
             #run_metrics
             #'random_order': ([(15, 0.75, 0.0), (66550, 0.6655, 0.00482), (666318, 0.666318, 0.048225)], 1000000)
             key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
-
             print("run metrics",run_metrics)
-            print("normalised_run",run_metrics[key][1])
-            print("duplite_ratio",run_metrics[key][-1])
+            size = target['name'].split('_')[-1]
+
+            if size == "small":
+                     normalised_runs =  run_metrics[key][0][0][1]
+               
+            elif size =="medium":
+                      normalised_runs = run_metrics[key][0][1][1]
+            else:
+                      normalised_runs = run_metrics[key][0][2][1]
+            duplicate_ratio = run_metrics[key][0][0][2]
+            print("normalised_run",normalised_runs)
+            print("duplite_ratio",duplicate_ratio)
 
             final_record = {
                 "algorithm_name":  algs,
@@ -316,8 +333,8 @@ def Benchmark_Cpp_Sort():
                 "num_runs": NUM_RUNS,
                 "comparisons":  alg_metrics['comps'], 
                 "swaps":  alg_metrics['swaps'],
-                "normalised_run":run_metrics[key][1],
-                "duplite_ratio":run_metrics[key][-1]                
+                "normalised_run":normalised_runs,
+                "duplite_ratio":duplicate_ratio               
             }
             final_results.append(final_record)
             permanente_storage(final_results)
