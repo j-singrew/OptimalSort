@@ -303,7 +303,7 @@ def Benchmark_Cpp_Sort():
             #'random_order': ([(15, 0.75, 0.0), (66550, 0.6655, 0.00482), (666318, 0.666318, 0.048225)], 1000000)
             key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
 
-            
+            print("run metrics",run_metrics)
             print("normalised_run",run_metrics[key][1])
             print("duplite_ratio",run_metrics[key][-1])
 
