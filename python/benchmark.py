@@ -1,6 +1,7 @@
 from dataset import DataGeneration
 from analytics.run_metric import run_variation_counter
 import numpy  as np
+import numpy as np
 
 import os.path
 import ctypes
@@ -328,6 +329,12 @@ def Benchmark_Cpp_Sort():
                 "normalised_run":normalised_runs,
                 "duplite_ratio":duplicate_ratio               
             }
+            feature_vector = np.array([
+                target['N'],
+                normalised_runs,
+                duplicate_ratio
+            ])
+            
             final_results.append(final_record)
             permanente_storage(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_metrics['time']:.4f} ms")
