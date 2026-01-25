@@ -20,44 +20,53 @@ def numb_run(normalised_run:float):
 
     #sortedness
     if normalised_run <= 0.05:
-        return array_algorithm_map["sorted"]["reverse_sorted"]
+        return "sorted"
     elif normalised_run <= 0.1:
-        return array_algorithm_map["nearly_sorted"]
+        return "nearly_sorted"
     elif normalised_run <= 0.6:
-        return array_algorithm_map["random"]
+        return "random"
     else:
-        return array_algorithm_map["zigzag"]
+        return "zigzag"
 
 def D_ratio(run_ratio:float):
     if D_ratio  <= 4.0:
-        return array_algorithm_map["low_duplicate"]
+        return "low_duplicate"
     if D_ratio  >= 5.0:      
-        return array_algorithm_map["high_duplicate"]  
+        return "high_duplicate"
+    
+def  Get_best_alg(A_arr,run_rate,duplicate_ratio):
+
+    size_algos = array_algorithm_map[A_arr]
+    run_algos = array_algorithm_map[run_rate]
+    dup_algos = array_algorithm_map[duplicate_ratio]
+
+
+    return list(set(size_algos) & set(run_algos) & set(dup_algos))
 
 
 def vectur_analytics(feature_vecter:list):
+    result = []
+
     for vector in feature_vecter:
-        N = vector[0]
-        N_runs = vector[1]
-        D_ratio_ = vector[2]
+        N, normalised_runs, duplicate_ratio = vector
+
         if N  < 100_000:
-            A_arr = array_algorithm_map["small_array"]
-            run_rate =  vectur_analytics(N_runs)
-            duplicate_ratio = D_ratio(D_ratio_)
+            A_arr = "small_array"
+
 
         elif 100_000 >= N < 1_000_000:
-            A_arr = array_algorithm_map["medium_array"]
-            run_rate =  vectur_analytics(N_runs)
-            duplicate_ratio = D_ratio(D_ratio_)
+            A_arr = "medium_array"
 
 
         elif  N >= 1_000_000:
-            A_arr = array_algorithm_map["large_array"]
-            run_rate =  vectur_analytics(N_runs)
-            duplicate_ratio = D_ratio(D_ratio_)
+            A_arr = "large_array"
+
       
 
 
+        run_rate =  vectur_analytics(normalised_runs)
+        duplicate_ratio = D_ratio(duplicate_ratio)
 
+        Get_best_alg(A_arr,run_rate,duplicate_ratio)
 
 
