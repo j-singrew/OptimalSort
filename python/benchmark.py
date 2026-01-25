@@ -14,6 +14,7 @@ dataset = DataGeneration()
 run_metrics = run_variation_counter(dataset)
 clibrary = None
 final_results = []
+feature_results =  []
 Time_Threshold = 1000
 NUM_RUNS = 5
 
@@ -268,6 +269,14 @@ def Benchmarking_Orchestration():
                 "normalised_run":normalised_runs,
                 "duplite_ratio":duplicate_ratio  
             }
+            feature_vector = np.array([
+                target['N'],
+                normalised_runs,
+                duplicate_ratio
+            ])
+
+            feature_results.append(feature_vector )
+
             final_results.append(final_record)
             permanente_storage(final_results)
             print(f"  {target['name']:<30} | Time: {alg_time['time']:.4f} ms")
@@ -335,7 +344,8 @@ def Benchmark_Cpp_Sort():
                 normalised_runs,
                 duplicate_ratio
             ])
-            
+
+            feature_results.append(feature_vector )
             final_results.append(final_record)
             permanente_storage(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_metrics['time']:.4f} ms")
