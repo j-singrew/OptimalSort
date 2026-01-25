@@ -1,4 +1,6 @@
 import numpy as np
+import csv
+
 #target['N'],
 #normalised_runs,
 #duplicate_ratio
@@ -28,10 +30,10 @@ def numb_run(normalised_run:float):
     else:
         return "zigzag"
 
-def D_ratio(run_ratio:float):
-    if D_ratio  <= 4.0:
+def D_ratio(duplicate_ratio:float):
+    if duplicate_ratio  <= 4.0:
         return "low_duplicate"
-    if D_ratio  >= 5.0:      
+    if duplicate_ratio  >= 5.0:      
         return "high_duplicate"
     
 def  Get_best_alg(A_arr,run_rate,duplicate_ratio):
@@ -45,7 +47,7 @@ def  Get_best_alg(A_arr,run_rate,duplicate_ratio):
 
 
 def vectur_analytics(feature_vecter:list):
-    result = []
+    results = []
 
     for vector in feature_vecter:
         N, normalised_runs, duplicate_ratio = vector
@@ -67,6 +69,18 @@ def vectur_analytics(feature_vecter:list):
         run_rate =  vectur_analytics(normalised_runs)
         duplicate_ratio = D_ratio(duplicate_ratio)
 
-        Get_best_alg(A_arr,run_rate,duplicate_ratio)
+        candidates = Get_best_alg(A_arr,run_rate,duplicate_ratio)
+
+        best_fit = candidates[0] if candidates else None
+
+        results.append({
+            "N": N,
+            "normalised_run": normalised_runs,
+            "duplicate_ratio": duplicate_ratio,
+            "candidates": candidates,
+            "selected_algorithm": best_fit
+        })
+    
+    return results
 
 
