@@ -244,6 +244,7 @@ def Benchmarking_Orchestration():
 
             data_to_pass = target['data']
 
+            alg_container(data_to_pass)
             alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
             key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
             size = target['name'].split('_')[-1]
@@ -283,6 +284,10 @@ def Benchmarking_Orchestration():
             print(f"  {target['name']:<30} | Time: {alg_time['time']:.4f} ms")
 
     return final_results
+
+def alg_container(arr):
+     arr_data = arr
+     print("this is arrr",alg_container)
 
 def Benchmark_Cpp_Sort():
     print("This is run metrics ",run_metrics)
