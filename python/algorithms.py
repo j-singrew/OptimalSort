@@ -1,4 +1,5 @@
 import pandas as pd
+from cpp import run_c_insertion_sort,run_c_heap_sort,run_c_three_way_quick_sort,run_c_shell_sort,run_c_merge_sort,run_iteration_metrics
 
 strategy_map = {
     "small_array": ["InsertionCore"],
@@ -13,13 +14,13 @@ strategy_to_algorithm = {
     "CountPath": ["CountingSort"],
     "ReverseAware": ["HeapSort"] 
 }
-#Algorithm_map = {
- #    "InsertionSort": c_insertion_sort,
- #   "QuickSort": custom_sort.c_three_way_quicksort,
- #   "HeapSort": custom_sort.c_heapsort,
- #   "MergeSort":custom_sort.c_merge_sort,
-  #  "ShellSort":custom_sort.c_shell_sort,
-#}
+Algorithm_map = {
+     "InsertionSort": run_c_insertion_sort,
+    "QuickSort": run_c_three_way_quick_sort,
+    "HeapSort": run_c_heap_sort,
+    "MergeSort":run_c_merge_sort,
+    "ShellSort":run_c_shell_sort,
+}
 
 def numb_run(normalised_run: float):
     if normalised_run <= 0.05:
@@ -28,8 +29,7 @@ def numb_run(normalised_run: float):
         return "nearly_sorted"
     elif normalised_run <= 0.6:
         return "random"
-    else:
-        return "zigzag"
+
 
 def D_ratio(dup_ratio: float):
     if dup_ratio <= 0.4:
@@ -43,10 +43,9 @@ def Get_best_alg(size_key, run_key, dup_key):
     dup_algos = strategy_map[dup_key]
     return list(set(size_algos) & set(run_algos) & set(dup_algos))
 
-def execute_algorithm(name, arr):
-    return strategy_to_algorithm[name](arr)
 
-def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str):
+
+def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str,num_runs: int):
     results = []
     benchmark_df = pd.read_csv(benchmark_csv)
 
@@ -80,7 +79,8 @@ def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str):
             best_alg = candidates[0] if candidates else None
 
 
-        execute_algorithm(best_alg,arr)
+
+        run_iteration_metrics(arr,strategy_to_algorithm[best_alg],num_runs)
         results.append({
             "N": N,
             "normalised_run": normalised_runs,
