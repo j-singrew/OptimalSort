@@ -1,16 +1,24 @@
 import pandas as pd
 
-array_algorithm_map = {
-    "small_array": ["InsertionSort", "Timsort"],
-    "medium_array": ["Timsort", "QuickSort", "HeapSort"],
-    "large_array": ["QuickSort", "NumPy Sort", "Timsort"],
-    "high_duplicate": ["CountingSort", "Timsort"],
-    "low_duplicate": ["QuickSort", "HeapSort", "Timsort"],
-    "sorted": ["InsertionSort", "Timsort"],
-    "reverse_sorted": ["Timsort"],
-    "nearly_sorted": ["Timsort"],
-    "random": ["QuickSort", "HeapSort", "Timsort"],
-    "zigzag": ["QuickSort", "HeapSort"]
+strategy_map = {
+    "small_array": ["InsertionCore"],
+    "medium_array": ["PartitionCore", "HeapFallback"],
+    "high_duplicate": ["CountPath"],
+    "reverse_sorted": ["ReverseAware"]
+}
+strategy_to_algorithm = {
+    "InsertionCore": ["InsertionSort"],
+    "PartitionCore": ["QuickSort"],
+    "HeapFallback": ["HeapSort"],
+    "CountPath": ["CountingSort"],
+    "ReverseAware": ["HeapSort"] 
+}
+Algorithm_map = {
+     "InsertionSort": c_insertion_sort,
+    "QuickSort": custom_sort.c_three_way_quicksort,
+    "HeapSort": custom_sort.c_heapsort,
+    "MergeSort":custom_sort.c_merge_sort,
+    "ShellSort":custom_sort.c_shell_sort,
 }
 
 def numb_run(normalised_run: float):
@@ -30,12 +38,15 @@ def D_ratio(dup_ratio: float):
         return "high_duplicate"
 
 def Get_best_alg(size_key, run_key, dup_key):
-    size_algos = array_algorithm_map[size_key]
-    run_algos = array_algorithm_map[run_key]
-    dup_algos = array_algorithm_map[dup_key]
+    size_algos = strategy_map[size_key]
+    run_algos = strategy_map[run_key]
+    dup_algos = strategy_map[dup_key]
     return list(set(size_algos) & set(run_algos) & set(dup_algos))
 
-def vector_analytics(feature_vectors: list, benchmark_csv: str):
+def execute_algorithm(name, arr):
+    return strategy_to_algorithm[name](arr)
+
+def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str):
     results = []
     benchmark_df = pd.read_csv(benchmark_csv)
 
@@ -68,6 +79,8 @@ def vector_analytics(feature_vectors: list, benchmark_csv: str):
         else:
             best_alg = candidates[0] if candidates else None
 
+
+        execute_algorithm(best_alg,arr)
         results.append({
             "N": N,
             "normalised_run": normalised_runs,
