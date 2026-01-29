@@ -350,7 +350,7 @@ def Benchmark_Cpp_Sort():
             final_results.append(final_record)
             permanente_storage(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_metrics['time']:.4f} ms")
-    vectur_analytics(feature_results)
+    vector_analytics(feature_results)
 if __name__ == "__main__":
     Benchmarking_Orchestration()
     Benchmark_Cpp_Sort()
