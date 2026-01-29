@@ -1,97 +1,23 @@
 from dataset import DataGeneration
 from analytics.run_metric import run_variation_counter
 import numpy  as np
-import numpy as np
+
+from cpp import clibrary,run_c_quicksort_wrapper,run_c_insertion_sort,run_c_heap_sort,run_c_three_way_quick_sort,run_c_shell_sort,run_c_merge_sort
 
 import os.path
 import ctypes
-import copy
+import copy 
 import time
 import csv
 from typing import List, Dict, Any
 from algorithms import vector_analytics
-
-dataset = DataGeneration()
-run_metrics = run_variation_counter(dataset)
-clibrary = None
-final_results = []
-feature_results =  []
+FILE_NAME = 'ds.csv'
 Time_Threshold = 1000
 NUM_RUNS = 5
-FILE_NAME = 'ds.csv'
-
-try:
- 
-        clibrary = ctypes.CDLL('custom_sort.so')
-
-except OSError:
-
-        try:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            library_path = os.path.join(current_dir, 'custom_sort.so')
-            
-       
-            clibrary = ctypes.CDLL(library_path)
-            
-        except Exception as inner_e:
-         
-            clibrary = None
-            print(f"[WARNING] Secondary load attempt failed: {type(inner_e).__name__}.")
-        if clibrary is not None:
-            
-            try:
-                print("Sucess conecting c++")
-    
-
-
-                clibrary.custom_quicksort_c.argtypes = [
-                    ctypes.POINTER(ctypes.c_int), 
-                    ctypes.c_int,
-                ]
-                clibrary.custom_quicksort_c.restype = None  
-
-                clibrary.c_insertion_sort.argtypes = [
-                    ctypes.POINTER(ctypes.c_int), 
-                    ctypes.c_int,
-                ]
-                clibrary.c_insertion_sort.restype = None  
-
-                clibrary.c_heapsort.argtypes = [
-                    ctypes.POINTER(ctypes.c_int), 
-                    ctypes.c_int,
-                ]
-                clibrary.c_heapsort.restype = None  
-
-                clibrary.c_three_way_quicksort.argtypes = [
-                    ctypes.POINTER(ctypes.c_int), 
-                    ctypes.c_int,
-                ]
-                clibrary.c_three_way_quicksort.restype = None  
-
-                clibrary.c_shell_sort.argtypes = [
-                    ctypes.POINTER(ctypes.c_int), 
-                    ctypes.c_int,
-                ]
-                clibrary.c_shell_sort.restype = None  
-
-                clibrary.c_merge_sort.argtypes = [
-                    ctypes.POINTER(ctypes.c_int), 
-                    ctypes.c_int,
-                ]
-                clibrary.c_merge_sort.restype = None  
-
-                SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
-                COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
-
-
-
-
-
-
-            except Exception as e:
-                print(f"\n[WARNING] C++ Library FFI failed to establish connection.")
-                clibrary = None
-
+final_results = []
+feature_results =  []
+dataset = DataGeneration()
+run_metrics = run_variation_counter(dataset)
 
 def permanente_storage(run_data: List[Dict[str, Any]]):
 
@@ -117,57 +43,6 @@ def permanente_storage(run_data: List[Dict[str, Any]]):
 
     except Exception as e:
         print(f"\n[ERROR] Failed to save benchmark data to CSV: {e}")
-
-def run_c_quicksort_wrapper(arr:np.ndarray):
-
-    if clibrary  is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ quicksort.")     
-    arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
-    c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.custom_quicksort_c(c_arr_pointer, arr_c_compatible.size)
-
-    
-def run_c_insertion_sort(arr:np.ndarray):
-
-    if clibrary is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ insertion sort.")   
-    
-    arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
-    c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_insertion_sort(c_arr_pointer, arr_c_compatible.size)
-
-def run_c_heap_sort(arr:np.ndarray):
-
-    if clibrary is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ heap sort.")   
-    arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
-    c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_heapsort(c_arr_pointer, arr_c_compatible.size)
-
-def run_c_three_way_quick_sort(arr:np.ndarray):
-
-    if clibrary is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ 3 way quicksort.")   
-
-    arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
-    c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_three_way_quicksort(c_arr_pointer, arr_c_compatible.size)
-
-def run_c_shell_sort(arr:np.ndarray):
-    if clibrary is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ 3 shell sort.")   
-
-    arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
-    c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_shell_sort(c_arr_pointer, arr_c_compatible.size)
-
-def run_c_merge_sort(arr:np.ndarray):
-    if clibrary is None:
-        raise RuntimeError("C++ library not loaded. Cannot run C++ merge sort.")   
-        
-    arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
-    c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
-    clibrary.c_merge_sort(c_arr_pointer, arr_c_compatible.size)
 
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
@@ -355,8 +230,8 @@ def Benchmark_Cpp_Sort():
             final_results.append(final_record)
             permanente_storage(final_results)
             print(f"  {target['name']:<30} | C++ Time: {alg_metrics['time']:.4f} ms")
-    vector_results = vector_analytics(target['data'],feature_results,FILE_NAME)
-    print("this is v",vector_results)
+    #vector_results = vector_analytics(target['data'],feature_results,FILE_NAME)
+    #print("this is v",vector_results)
 if __name__ == "__main__":
     Benchmarking_Orchestration()
     Benchmark_Cpp_Sort()
