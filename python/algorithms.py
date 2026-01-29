@@ -4,7 +4,7 @@ from cpp import run_c_insertion_sort,run_c_heap_sort,run_c_three_way_quick_sort,
 strategy_map = {
     "small_array": ["InsertionCore"],
     "medium_array": ["PartitionCore", "HeapFallback"],
-    "reverse_sorted": ["ReverseAware"]
+    "large_array": ["PartitionCore", "HeapFallback"]
 }
 
 strategy_to_algorithm = {
@@ -96,19 +96,22 @@ def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str,num_runs
 
         best_alg = Get_best_alg(size_key, normalised_runs, duplicate_ratio)
 
+        a = strategy_to_algorithm[best_alg]
+        print("this is a",a)
+        alg_candidates = strategy_to_algorithm[best_alg]
 
+        results = []
+        for alg_name in alg_candidates:
+            run_fn = Algorithm_map[alg_name]
+            metrics = run_iteration_metrics(arr, run_fn, num_runs)
+            results.append((alg_name, metrics))
 
-  
-
-
-
-        r = run_iteration_metrics(arr,strategy_to_algorithm[best_alg],num_runs)
-        print("this is r",r)
-        results.append({
-            "N": N,
-            "normalised_run": normalised_runs,
-            "duplicate_ratio": duplicate_ratio,
-            "selected_algorithm": best_alg
-        })
+            print(results)
+        #results.append({
+        #    "N": N,
+        #    "normalised_run": normalised_runs,
+        #    "duplicate_ratio": duplicate_ratio,
+        #    "selected_algorithm": best_alg
+        #})
 
     return results
