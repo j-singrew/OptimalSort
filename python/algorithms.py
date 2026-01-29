@@ -4,9 +4,9 @@ from cpp import run_c_insertion_sort,run_c_heap_sort,run_c_three_way_quick_sort,
 strategy_map = {
     "small_array": ["InsertionCore"],
     "medium_array": ["PartitionCore", "HeapFallback"],
-    "high_duplicate": ["CountPath"],
-    "reverse_sorted": ["ReverseAware"]
+    "large_array": ["PartitionCore", "HeapFallback"]
 }
+
 strategy_to_algorithm = {
     "InsertionCore": ["InsertionSort"],
     "PartitionCore": ["QuickSort"],
@@ -22,26 +22,56 @@ Algorithm_map = {
     "ShellSort":run_c_shell_sort,
 }
 
+duplicate_map = {
+    "low_duplicate": ["PartitionCore", "HeapFallback"],  
+    "high_duplicate": ["CountPath"]                      
+}
+
+
+run_map = {
+    "sorted": ["InsertionCore"],
+    "nearly_sorted": ["InsertionCore"],
+    "random": ["PartitionCore", "HeapFallback"],
+    "zigzag": ["PartitionCore", "HeapFallback"],
+    "reverse_sorted": ["ReverseAware"]
+}
+
+
 def numb_run(normalised_run: float):
     if normalised_run <= 0.05:
-        return "sorted"
+        return run_map["sorted"]
     elif normalised_run <= 0.1:
-        return "nearly_sorted"
+        return run_map["nearly_sorted"]
     elif normalised_run <= 0.6:
-        return "random"
-
+        return run_map["random"]
+    else:
+        return run_map["zigzag"]
 
 def D_ratio(dup_ratio: float):
     if dup_ratio <= 0.4:
-        return "low_duplicate"
+        return duplicate_map["low_duplicate"]
     else:
-        return "high_duplicate"
-
+        return duplicate_map["high_duplicate"]
+    
 def Get_best_alg(size_key, run_key, dup_key):
-    size_algos = strategy_map[size_key]
-    run_algos = strategy_map[run_key]
-    dup_algos = strategy_map[dup_key]
-    return list(set(size_algos) & set(run_algos) & set(dup_algos))
+
+    candidates = strategy_map[size_key]
+    scores = {s:0 for s in candidates}
+
+
+    for s in numb_run(run_key):
+        if s in scores:
+            scores[s] += 2
+
+    for s in D_ratio(dup_key):
+        if s in scores:
+            scores[s] += 3
+
+    return max(scores, key=scores.get)
+
+
+
+
 
 
 
@@ -61,32 +91,27 @@ def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str,num_runs
             size_key = "large_array"
 
 
-        run_key = numb_run(normalised_runs)
-        dup_key = D_ratio(duplicate_ratio)
-
-
-        candidates = Get_best_alg(size_key, run_key, dup_key)
-
-
-        subset = benchmark_df[
-            (benchmark_df['algorithm_name'].isin(candidates)) &
-            (benchmark_df['N'] == N)
-        ]
-
-        if not subset.empty:
-            best_alg = subset.loc[subset['avg_time_ms'].idxmin(), 'algorithm_name']
-        else:
-            best_alg = candidates[0] if candidates else None
 
 
 
-        run_iteration_metrics(arr,strategy_to_algorithm[best_alg],num_runs)
-        results.append({
-            "N": N,
-            "normalised_run": normalised_runs,
-            "duplicate_ratio": duplicate_ratio,
-            "candidates": candidates,
-            "selected_algorithm": best_alg
-        })
+        best_alg = Get_best_alg(size_key, normalised_runs, duplicate_ratio)
+
+        a = strategy_to_algorithm[best_alg]
+        print("this is a",a)
+        alg_candidates = strategy_to_algorithm[best_alg]
+
+        results = []
+        for alg_name in alg_candidates:
+            run_fn = Algorithm_map[alg_name]
+            metrics = run_iteration_metrics(arr, run_fn, num_runs)
+            results.append((alg_name, metrics))
+
+            print(results)
+        #results.append({
+        #    "N": N,
+        #    "normalised_run": normalised_runs,
+        #    "duplicate_ratio": duplicate_ratio,
+        #    "selected_algorithm": best_alg
+        #})
 
     return results

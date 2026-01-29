@@ -125,9 +125,11 @@ def Benchmarking_Orchestration():
             ])
 
             feature_results.append(feature_vector )
+            
 
             final_results.append(final_record)
             permanente_storage(final_results)
+
             print(f"  {target['name']:<30} | Time: {alg_time['time']:.4f} ms")
 
     return final_results
