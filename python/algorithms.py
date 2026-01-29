@@ -1,5 +1,5 @@
 import pandas as pd
-import custom_sort  #import c_insertion_sort,c_three_way_quicksort,c_heapsort,c_merge_sort,c_shell_sort
+
 strategy_map = {
     "small_array": ["InsertionCore"],
     "medium_array": ["PartitionCore", "HeapFallback"],
@@ -14,7 +14,7 @@ strategy_to_algorithm = {
     "ReverseAware": ["HeapSort"] 
 }
 Algorithm_map = {
-     "InsertionSort": custom_sort.c_insertion_sort,
+     "InsertionSort": c_insertion_sort,
     "QuickSort": custom_sort.c_three_way_quicksort,
     "HeapSort": custom_sort.c_heapsort,
     "MergeSort":custom_sort.c_merge_sort,
@@ -46,7 +46,7 @@ def Get_best_alg(size_key, run_key, dup_key):
 def execute_algorithm(name, arr):
     return strategy_to_algorithm[name](arr)
 
-def vector_analytics(feature_vectors: list, benchmark_csv: str):
+def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str):
     results = []
     benchmark_df = pd.read_csv(benchmark_csv)
 
@@ -79,9 +79,8 @@ def vector_analytics(feature_vectors: list, benchmark_csv: str):
         else:
             best_alg = candidates[0] if candidates else None
 
-        alg_run = [strategy_to_algorithm['best_alg']]
 
-        execute_algorithm(best_alg,)
+        execute_algorithm(best_alg,arr)
         results.append({
             "N": N,
             "normalised_run": normalised_runs,
