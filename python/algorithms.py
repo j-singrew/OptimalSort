@@ -7,6 +7,7 @@ strategy_map = {
     "high_duplicate": ["CountPath"],
     "reverse_sorted": ["ReverseAware"]
 }
+
 strategy_to_algorithm = {
     "InsertionCore": ["InsertionSort"],
     "PartitionCore": ["QuickSort"],
@@ -22,26 +23,41 @@ Algorithm_map = {
     "ShellSort":run_c_shell_sort,
 }
 
+duplicate_map = {
+    "low_duplicate": ["PartitionCore", "HeapFallback"],  
+    "high_duplicate": ["CountPath"]                      
+}
+
+
+run_map = {
+    "sorted": ["InsertionCore"],
+    "nearly_sorted": ["InsertionCore"],
+    "random": ["PartitionCore", "HeapFallback"],
+    "zigzag": ["PartitionCore", "HeapFallback"],
+    "reverse_sorted": ["ReverseAware"]
+}
+
+
 def numb_run(normalised_run: float):
     if normalised_run <= 0.05:
-        return "sorted"
+        return run_map["sorted"]
     elif normalised_run <= 0.1:
-        return "nearly_sorted"
+        return run_map["nearly_sorted"]
     elif normalised_run <= 0.6:
-        return "random"
-
+        return run_map["random"]
+    else:
+        return run_map["zigzag"]
 
 def D_ratio(dup_ratio: float):
     if dup_ratio <= 0.4:
-        return "low_duplicate"
+        return duplicate_map["low_duplicate"]
     else:
-        return "high_duplicate"
-
+        return duplicate_map["high_duplicate"]
+    
 def Get_best_alg(size_key, run_key, dup_key):
-    size_algos = strategy_map[size_key]
-    run_algos = strategy_map[run_key]
-    dup_algos = strategy_map[dup_key]
-    return list(set(size_algos) & set(run_algos) & set(dup_algos))
+
+    list(set(size_key) & set(run_key) & set(dup_key))
+    return
 
 
 
