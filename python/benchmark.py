@@ -9,7 +9,7 @@ import copy
 import time
 import csv
 from typing import List, Dict, Any
-from algorithms import vectur_analytics
+from algorithms import vector_analytics
 
 dataset = DataGeneration()
 run_metrics = run_variation_counter(dataset)
