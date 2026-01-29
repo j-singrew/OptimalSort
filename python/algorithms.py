@@ -4,7 +4,6 @@ from cpp import run_c_insertion_sort,run_c_heap_sort,run_c_three_way_quick_sort,
 strategy_map = {
     "small_array": ["InsertionCore"],
     "medium_array": ["PartitionCore", "HeapFallback"],
-    "high_duplicate": ["CountPath"],
     "reverse_sorted": ["ReverseAware"]
 }
 
@@ -56,8 +55,23 @@ def D_ratio(dup_ratio: float):
     
 def Get_best_alg(size_key, run_key, dup_key):
 
-    list(set(size_key) & set(run_key) & set(dup_key))
-    return
+    candidates = strategy_map[size_key]
+    scores = {s:0 for s in candidates}
+
+
+    for s in numb_run(run_key):
+        if s in scores:
+            scores[s] += 2
+
+    for s in D_ratio(dup_key):
+        if s in scores:
+            scores[s] += 3
+
+    return max(scores, key=scores.get)
+
+
+
+
 
 
 
@@ -77,31 +91,23 @@ def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str,num_runs
             size_key = "large_array"
 
 
-        run_key = numb_run(normalised_runs)
-        dup_key = D_ratio(duplicate_ratio)
-
-
-        candidates = Get_best_alg(size_key, run_key, dup_key)
-
-
-        subset = benchmark_df[
-            (benchmark_df['algorithm_name'].isin(candidates)) &
-            (benchmark_df['N'] == N)
-        ]
-
-        if not subset.empty:
-            best_alg = subset.loc[subset['avg_time_ms'].idxmin(), 'algorithm_name']
-        else:
-            best_alg = candidates[0] if candidates else None
 
 
 
-        run_iteration_metrics(arr,strategy_to_algorithm[best_alg],num_runs)
+        best_alg = Get_best_alg(size_key, normalised_runs, duplicate_ratio)
+
+
+
+  
+
+
+
+        r = run_iteration_metrics(arr,strategy_to_algorithm[best_alg],num_runs)
+        print("this is r",r)
         results.append({
             "N": N,
             "normalised_run": normalised_runs,
             "duplicate_ratio": duplicate_ratio,
-            "candidates": candidates,
             "selected_algorithm": best_alg
         })
 
