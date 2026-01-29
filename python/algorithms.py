@@ -13,13 +13,13 @@ strategy_to_algorithm = {
     "CountPath": ["CountingSort"],
     "ReverseAware": ["HeapSort"] 
 }
-Algorithm_map = {
-     "InsertionSort": c_insertion_sort,
-    "QuickSort": custom_sort.c_three_way_quicksort,
-    "HeapSort": custom_sort.c_heapsort,
-    "MergeSort":custom_sort.c_merge_sort,
-    "ShellSort":custom_sort.c_shell_sort,
-}
+#Algorithm_map = {
+ #    "InsertionSort": c_insertion_sort,
+ #   "QuickSort": custom_sort.c_three_way_quicksort,
+ #   "HeapSort": custom_sort.c_heapsort,
+ #   "MergeSort":custom_sort.c_merge_sort,
+  #  "ShellSort":custom_sort.c_shell_sort,
+#}
 
 def numb_run(normalised_run: float):
     if normalised_run <= 0.05:
