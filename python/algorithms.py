@@ -59,12 +59,12 @@ def vector_analytics(feature_vectors: list, benchmark_csv: str):
 
 
         subset = benchmark_df[
-            (benchmark_df['algorithm'].isin(candidates)) &
+            (benchmark_df['algorithm_name'].isin(candidates)) &
             (benchmark_df['N'] == N)
         ]
 
         if not subset.empty:
-            best_alg = subset.loc[subset['avg_time_ms'].idxmin(), 'algorithm']
+            best_alg = subset.loc[subset['avg_time_ms'].idxmin(), 'algorithm_name']
         else:
             best_alg = candidates[0] if candidates else None
 

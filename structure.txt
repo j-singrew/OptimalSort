@@ -20,4 +20,4 @@ project/
 
 
 gcc -fPIC -shared -o custom_sort.so ../cpp/custom_sort.cpp
-python3 benchmark_orchestrator.py
+python3 benchmark.py
