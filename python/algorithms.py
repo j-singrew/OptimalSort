@@ -78,7 +78,7 @@ def Get_best_alg(size_key, run_key, dup_key):
 def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str,num_runs: int):
     results = []
     benchmark_df = pd.read_csv(benchmark_csv)
-
+    arr_copy = arr[:]
     for vector in feature_vectors:
         N, normalised_runs, duplicate_ratio = vector
 
@@ -103,7 +103,7 @@ def vector_analytics(arr:list,feature_vectors: list, benchmark_csv: str,num_runs
         results = []
         for alg_name in alg_candidates:
             run_fn = Algorithm_map[alg_name]
-            metrics = run_iteration_metrics(arr, run_fn, num_runs)
+            metrics = run_iteration_metrics(arr_copy, run_fn, num_runs)
             results.append((alg_name, metrics))
 
             print(results)
