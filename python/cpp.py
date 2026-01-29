@@ -1,12 +1,12 @@
 import os.path
 import ctypes
-from typing import  Dict
 import numpy as np
-import csv
+import copy 
+import time
+
 
 clibrary = None
-final_results = []
-feature_results =  []
+
 
 
 
@@ -133,3 +133,33 @@ def run_c_merge_sort(arr:np.ndarray):
     arr_c_compatible = np.ascontiguousarray(arr, dtype=np.intc)
     c_arr_pointer = arr_c_compatible.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
     clibrary.c_merge_sort(c_arr_pointer, arr_c_compatible.size)
+
+
+
+def  run_iteration_metrics(data_arr,sort_func,num_runs):
+
+    times_list = []
+    swaps_list = []
+    comparisons_list = []
+
+    for _ in range(num_runs):
+
+        data_copy = copy.deepcopy(data_arr)
+        start_time = time.perf_counter()
+
+        sort_func(data_copy)
+
+        end_time = time.perf_counter()
+
+        SWAP = ctypes.c_longlong.in_dll(clibrary ,"SWAP").value
+        COMPARASON = ctypes.c_longlong.in_dll(clibrary ,"COMPARASON").value
+
+        times_list.append(end_time - start_time)
+        swaps_list.append(SWAP)
+        comparisons_list.append(COMPARASON)  
+
+    avg_time = min(times_list)
+    avg_swaps = sum(swaps_list) / num_runs
+    avg_comparisons = sum(comparisons_list) / num_runs
+
+    return { 'time': avg_time, 'swaps': avg_swaps, 'comps': avg_comparisons }
