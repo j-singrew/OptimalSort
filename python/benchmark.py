@@ -3,7 +3,7 @@ from analytics.run_metric import run_variation_counter
 import numpy  as np
 
 from cpp import clibrary,run_c_quicksort_wrapper,run_c_insertion_sort,run_c_heap_sort,run_c_three_way_quick_sort,run_c_shell_sort,run_c_merge_sort,run_iteration_metrics
-
+import timeit
 import os.path
 import ctypes
 import copy 
@@ -44,6 +44,8 @@ def permanente_storage(run_data: List[Dict[str, Any]]):
     except Exception as e:
         print(f"\n[ERROR] Failed to save benchmark data to CSV: {e}")
 
+
+#Prep
 def prepare_benchmark_targets():
     size_name = ["small","medium","large"]
 
@@ -73,15 +75,13 @@ def prepare_benchmark_targets():
 
 
 
-
-def Benchmarking_Orchestration():
-
-    test_targets = prepare_benchmark_targets()
+#_____timeSort
+def Benchmarking_Orchestration(test_targets):
 
     algorithms_to_run = [
 
         ("Python Timsort", lambda arr: arr.tolist().sort()),
-        ("NumPy Sort", lambda arr: np.sort(arr))
+        #("NumPy Sort", lambda arr: np.sort(arr))
     ]
 
 
@@ -89,10 +89,15 @@ def Benchmarking_Orchestration():
     for algo_name ,algo_typ in  algorithms_to_run:
 
         for target in test_targets:
+            data_copied = target["data"].copy()
 
-            data_to_pass = target['data']
+            
+            start_time = time.perf_counter()
+            timeseort_alg = data_copied.sort()
+            end_time = time.perf_counter()
 
-            alg_time = run_iteration_metrics(data_arr=data_to_pass,sort_func=algo_typ,num_runs= NUM_RUNS )
+            elapsed_time = end_time - start_time
+
             key = (target['name'].split('_')[0])+"_"+(target['name'].split('_')[1])
             size = target['name'].split('_')[-1]
             if size == "small":
@@ -103,7 +108,7 @@ def Benchmarking_Orchestration():
                       duplicate_ratio =  run_metrics[key][0][1][2]
             else:
                       normalised_runs = run_metrics[key][0][2][1]
-                      normalised_runs = run_metrics[key][0][2][2]
+                      duplicate_ratio  = run_metrics[key][0][2][2]
                       
 
             final_record = {
@@ -111,7 +116,7 @@ def Benchmarking_Orchestration():
                 "data_pattern": target['name'].split('_')[0],
                 "size_category": target['name'].split('_')[-1],
                 "N": target['N'],
-                "avg_time_ms":  alg_time['time'],
+                "avg_time_ms":  elapsed_time ,
                 "num_runs": NUM_RUNS,
                 "comparisons": 0, 
                 "swaps": 0,
@@ -119,6 +124,7 @@ def Benchmarking_Orchestration():
                 "duplite_ratio":duplicate_ratio  
             }
             feature_vector = np.array([
+                
                 target['N'],
                 normalised_runs,
                 duplicate_ratio
@@ -130,7 +136,7 @@ def Benchmarking_Orchestration():
             final_results.append(final_record)
             permanente_storage(final_results)
 
-            print(f"  {target['name']:<30} | Time: {alg_time['time']:.4f} ms")
+            print(f"  {algo_name:<30} | Time: {elapsed_time :.4f} ms")
 
     return final_results
 
@@ -138,7 +144,7 @@ def alg_container(arr):
      arr_data = arr
      print("this is arrr",alg_container)
 
-def Benchmark_Cpp_Sort():
+def Benchmark_Cpp_Sort(test_targets):
     print("This is run metrics ",run_metrics)
     cpp_algorithms_to_run = [
     ("C++ Quick Sort", run_c_quicksort_wrapper),
@@ -152,16 +158,18 @@ def Benchmark_Cpp_Sort():
         print("C++ library not loaded. Skipping C++ benchmarks.")
         return
 
-    test_targets = prepare_benchmark_targets()
+
 
     for target in test_targets:
+        data_copied = target["data"].copy()
+
         for algs,algo_typ in cpp_algorithms_to_run:
             if (algs =="C++ Insertion Sort" or algs =="C++ three way shell Sort")   and target['N'] > 100000:
                 alg_time = 99999.0 
             else:          
 
                 alg_metrics = run_iteration_metrics(
-                data_arr=target["data"],
+                data_arr=data_copied,
                 sort_func=algo_typ,
                 num_runs=NUM_RUNS,          
                 )
@@ -207,5 +215,7 @@ def Benchmark_Cpp_Sort():
     vector_results = vector_analytics(target['data'],feature_results,FILE_NAME,NUM_RUNS)
     print("this is v",vector_results)
 if __name__ == "__main__":
-    #Benchmarking_Orchestration()
-    Benchmark_Cpp_Sort()
+    #benchmarks_to_run
+    test_targets = prepare_benchmark_targets()
+    Benchmarking_Orchestration(test_targets)
+    Benchmark_Cpp_Sort(test_targets)
