@@ -1,3 +1,0 @@
-extern "c" {
-    static
-}
