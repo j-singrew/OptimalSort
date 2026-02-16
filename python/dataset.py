@@ -7,6 +7,7 @@ from numpy import random
 
 N_SMALL = 20
 N_MEDIUM = 100_000
+
 N_LARGE  = 1_000_000
 N_UNIQUE = 1000
 SWAP_PERCENTAGE = 0.01
