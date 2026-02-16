@@ -18,6 +18,13 @@ final_results = []
 feature_results =  []
 dataset = DataGeneration()
 run_metrics = run_variation_counter(dataset)
+Run_results = {
+    "Quick Sort": [],
+    "Insertion Sort": [],
+    "heap Sort":[],
+    "shell Sort":[],
+    "merge Sort":[],
+}
 
 def permanente_storage(run_data: List[Dict[str, Any]]):
 
@@ -189,6 +196,7 @@ def Benchmark_Cpp_Sort(test_targets):
                       normalised_runs = run_metrics[key][0][2][2]
 
             #Add timesort metric and other on 
+
             final_record = {
                 "algorithm_name":  algs,
                 "data_pattern": target['name'].split('_')[0],
