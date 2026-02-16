@@ -7,6 +7,6 @@ load_dotenv()
 env = os.getenv("CSV_PATH")
 df = pd.read_csv(env)
 
-print(df.head(10))
+
 
 
